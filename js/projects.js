@@ -11,7 +11,9 @@
      line     one sentence: what it does for the business
      tags     2 to 4 short tags
      url      the live address (live and product only)
-     img      a screenshot saved in media/work (1280x800 page, jpg)
+     img      a screenshot saved in media/work (1280x800 page, jpg). For a
+              private system: made from fake/training data only, with the
+              business name hidden and every name, number and date blurred.
      show     false hides it from the site without deleting it
 
    Rule: only our own work. Every url must be proven ours: a domain on our
@@ -89,12 +91,12 @@ window.AGI_PROJECTS = [
   {
     name: 'Clinic operations system', group: 'system', kind: 'Web app',
     line: 'Point of sale, Face ID clock-in, payroll, patient consent and bookings for an aesthetic clinic.',
-    tags: ['Healthcare', 'POS', 'Payroll'], show: true,
+    tags: ['Healthcare', 'POS', 'Payroll'], img: 'media/work/clinic-system.jpg', show: true,
   },
   {
     name: 'Household staff app', group: 'system', kind: 'Web app',
     line: 'Daily tasks, time-in, pay and instant phone alerts for a family\'s household team.',
-    tags: ['Operations', 'Mobile', 'Payroll'], show: true,
+    tags: ['Operations', 'Mobile', 'Payroll'], img: 'media/work/household-app.jpg', show: true,
   },
   {
     name: 'Home health agency suite', group: 'system', kind: 'Web apps',
@@ -104,7 +106,7 @@ window.AGI_PROJECTS = [
   {
     name: 'Restaurant POS and payroll', group: 'system', kind: 'Web app',
     line: 'Orders, inventory, staff and payroll for a 24/7 restaurant, built for the kitchen floor.',
-    tags: ['Food & drink', 'POS', 'Payroll'], show: true,
+    tags: ['Food & drink', 'POS', 'Payroll'], img: 'media/work/restaurant-pos.jpg', show: true,
   },
   {
     name: 'Retail POS and inventory', group: 'system', kind: 'Web app',
