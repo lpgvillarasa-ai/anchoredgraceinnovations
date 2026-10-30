@@ -1,0 +1,12 @@
+// Publishing settings for anchoredgraceinnovation.com (Cloudflare Worker "agi-website").
+// Publish from this folder with: npx wrangler deploy
+{
+  "name": "agi-website",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "." },
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "anchoredgraceinnovation.com", "custom_domain": true },
+    { "pattern": "www.anchoredgraceinnovation.com", "custom_domain": true }
+  ]
+}

@@ -1,20 +1,41 @@
-# Anchored Grace Innovations — Website
+# Anchored Grace Innovations: agency website
 
-Marketing site for Anchored Grace Innovations (AGI): staffing & AI-equipped talent placement plus websites, apps and systems for growing companies.
+The public website at **anchoredgraceinnovation.com**. It is where every client
+lands: our services, our work, and a button to book a discovery call.
 
-Implemented from the Claude Design handoff (`AGI Website.dc.html`).
+## What is on the page
+
+- **Services:** three pillars (Build, Automate, Staff) plus marketing videos as an add-on
+- **Our work:** a gallery with filters (client websites, our products, business systems)
+- **Marketing videos:** hidden until videos are added (see below)
+- **AI-native talent, how it works, ways to work with us, book a call**
+
+## Changing the project list (the only file you need)
+
+Open `js/projects.js`. Each project is one block. To hide one without deleting it,
+set `show: false`. To show a site that just launched, set `show: true`.
+
+Rules we follow:
+- A client's name appears only once their site is public.
+- Private systems hold real people's data: we describe them, never link or open them.
+- Screenshots live in `media/work/` and are stored with the site, not loaded from
+  another company's service.
+
+To add videos, put the `.mp4` and a still picture in `media/` and add an entry to
+`AGI_VIDEOS` at the bottom of `js/projects.js`. The video section appears by itself.
 
 ## Stack
 
-Plain static HTML/CSS/JS — no build step, no dependencies.
+Plain HTML, CSS and JavaScript. No build step.
 
-- `index.html` — the one-page site (hero, services, mission, talent, AI band, process, testimonials, pricing, contact, footer)
-- `css/styles.css` — all styles; design tokens live in `:root`
-- `js/main.js` — scroll reveals, glass-nav condense, mobile menu
+- `index.html`: the page
+- `css/styles.css`: all styles (colours and fonts at the top, in `:root`)
+- `js/projects.js`: the project and video list
+- `js/work.js`: draws the gallery from that list
+- `js/main.js`: scroll animations, menu
+- `_headers`: security rules (which outside sources the page may load)
 
 ## Run locally
-
-Open `index.html` directly, or serve the folder:
 
 ```sh
 python3 -m http.server 8000
@@ -22,11 +43,19 @@ python3 -m http.server 8000
 
 Then visit http://localhost:8000.
 
-## Deploy
+## Publishing
 
-Any static host works (Netlify, Vercel, GitHub Pages, Cloudflare Pages). Point it at the repo root; no build command needed.
+The site runs on Cloudflare as the Worker `agi-website`. It is **not** published
+automatically from GitHub; publishing is a deliberate step:
 
-## Placeholders to fill in
+```sh
+npx wrangler deploy
+```
 
-- Testimonials section — two placeholder quote cards marked `PLACEHOLDER — YOUR TESTIMONIALS`
-- Pricing — `from $—/mo` amounts on the Fractional and Dedicated Seat plans
+`.assetsignore` keeps these notes and the agent files off the public site.
+
+## Coming next
+
+- Phase 2: an AI estimate assistant that only talks about our services and only
+  quotes from the price book Lee approves, with bot protection and spending caps.
+- Phase 3: safe demo copies of our own products on fake data, and tap-to-talk.
