@@ -24,6 +24,25 @@ Rules we follow:
 To add videos, put the `.mp4` and a still picture in `media/` and add an entry to
 `AGI_VIDEOS` at the bottom of `js/projects.js`. The video section appears by itself.
 
+## Brand
+
+- **Logo:** an anchor whose ring is a gold spark: a steady foundation with AI on top.
+- **Fonts:** Geist (headings and text) and Geist Mono (small labels). Both free for commercial use.
+- **Colors:** midnight `#0B0E13`, champagne `#D8C39B` (on dark), deep champagne `#8F7547`
+  (champagne text on light backgrounds), paper `#F4F1EB`.
+
+Logo files live in `brand/` (the text is drawn as shapes, so they look right anywhere):
+
+| File | Use it for |
+| --- | --- |
+| `agi-logo-for-dark.svg` / `.png` | Full logo on dark backgrounds |
+| `agi-logo-for-light.svg` / `.png` | Full logo on white or light backgrounds |
+| `agi-icon.svg`, `png/agi-icon-*.png` | Profile pictures, app icons, favicons |
+| `agi-mark-for-dark.svg` / `-for-light.svg` | The anchor alone, no tile |
+
+Use the SVG whenever a tool accepts it (Canva, Figma, printers); PNGs are for everything else.
+`og-image.png` is the picture shown when the site link is shared on Messenger, LinkedIn or Viber.
+
 ## Stack
 
 Plain HTML, CSS and JavaScript. No build step.
@@ -51,6 +70,9 @@ automatically from GitHub; publishing is a deliberate step:
 ```sh
 npx wrangler deploy
 ```
+
+If asset upload is not possible (some sandboxes), `node tools/bundle-worker.mjs > worker.js`
+packs the whole site into one script that can be uploaded instead.
 
 `.assetsignore` keeps these notes and the agent files off the public site.
 
