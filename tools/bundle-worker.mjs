@@ -2,11 +2,16 @@
 // upload). Used when `npx wrangler deploy` cannot upload assets, e.g. from a
 // sandbox whose proxy rewrites the upload pass. Run from the repo root:
 //   node tools/bundle-worker.mjs > /path/to/worker.js
+// Only git-tracked files are included: commit (after review) before publishing.
 // Rules from _headers are applied by the bundled script, same as Cloudflare would.
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 
 const root = process.cwd();
+// Only files saved to git are published, so nothing half-finished or
+// unreviewed (e.g. a screenshot still being checked) can go live by accident.
+const tracked = new Set(execSync('git ls-files', { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean));
 const ignore = fs.readFileSync(path.join(root, '.assetsignore'), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -21,6 +26,7 @@ const files = {};
     const rel = path.relative(root, full);
     if (ignore.includes(name) || ignore.includes(rel) || name === '_headers' || name.startsWith('.')) continue;
     if (fs.statSync(full).isDirectory()) { walk(full); continue; }
+    if (!tracked.has(rel.split(path.sep).join('/'))) continue;
     const type = TYPES[path.extname(name).toLowerCase()];
     if (!type) continue;
     files['/' + rel.split(path.sep).join('/')] = { type, b64: fs.readFileSync(full).toString('base64') };
