@@ -14,10 +14,13 @@
      img      a screenshot saved in media/work (1280x800 page, jpg)
      show     false hides it from the site without deleting it
 
-   Rule: only our own work. Every url must be proven ours: a domain or
-   lpg-villarasa.workers.dev address on our Cloudflare account, or a link on
-   Lee's own portfolio (leevillarasa.xyz). Never take an address from a
-   README alone.
+   Rule: only our own work. Every url must be proven ours: a domain on our
+   Cloudflare account, or a link on Lee's own portfolio (leevillarasa.xyz).
+   Never take an address from a README alone.
+   Rule: never show a hosting company's address (workers.dev, vercel.app,
+   netlify.app, pages.dev). A site without its own domain gets a subdomain
+   of ours instead, e.g. kfitness.anchoredgraceinnovation.com (Cloudflare:
+   Workers > the site > Settings > Domains > Add custom domain).
    Rule: a client's name goes up only once their site is public. Private
    systems hold real people's data, so they are described, never opened.
    ========================================================================== */
@@ -42,17 +45,17 @@ window.AGI_PROJECTS = [
   {
     name: 'KFitness PH', group: 'live', kind: 'Website',
     line: 'A bold site for a 24/7 gym chain across Metro Cebu: branches, plans and sign-ups.',
-    tags: ['Fitness', 'Multi-branch'], url: 'https://kfitnessph.lpg-villarasa.workers.dev', img: 'media/work/kfitness.jpg', show: true,
+    tags: ['Fitness', 'Multi-branch'], url: 'https://kfitness.anchoredgraceinnovation.com', img: 'media/work/kfitness.jpg', show: true,
   },
   {
     name: 'Supreme Pickle Court', group: 'live', kind: 'Booking app',
     line: 'Players book court-hours online; the owner runs the courts from one workspace.',
-    tags: ['Sports', 'Booking'], url: 'https://supremepicklecourt.lpg-villarasa.workers.dev', img: 'media/work/supreme-pickle.jpg', show: true,
+    tags: ['Sports', 'Booking'], url: 'https://supremepicklecourt.anchoredgraceinnovation.com', img: 'media/work/supreme-pickle.jpg', show: true,
   },
   {
     name: 'Ruje Café', group: 'live', kind: 'Website',
     line: 'A warm, menu-first site for a specialty coffee shop inside a sports venue.',
-    tags: ['Food & drink', 'Local'], url: 'https://rujecafeandperiperiboy.lpg-villarasa.workers.dev', img: 'media/work/ruje-cafe.jpg', show: true,
+    tags: ['Food & drink', 'Local'], url: 'https://rujecafe.anchoredgraceinnovation.com', img: 'media/work/ruje-cafe.jpg', show: true,
   },
 
   // ---------- Our own products ----------
