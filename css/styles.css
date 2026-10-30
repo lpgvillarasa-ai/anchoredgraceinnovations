@@ -817,6 +817,52 @@ body {
 .addon-copy p { margin: 0; font-size: 15px; line-height: 1.55; color: #5b625b; }
 .addon .btn { flex: none; }
 
+/* ============ US staffing page ============ */
+.day-list { list-style: none; margin: 4px 0 52px; padding: 0; display: grid; gap: 10px; }
+.day-list li {
+  display: grid; grid-template-columns: 52px 1fr; align-items: center; gap: 12px;
+  background: var(--ink-panel); border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 9px; padding: 12px 14px; font-size: 13.5px; color: var(--cream-text);
+}
+.day-time { font: 400 12px/1 var(--font-mono); color: #8e939b; font-variant-numeric: tabular-nums; }
+.day-list li.gold .day-time { color: var(--gold); }
+.task-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.task {
+  background: var(--cream-panel); border: 1px solid rgba(11, 14, 19, 0.1); border-radius: 14px; padding: 26px 24px;
+}
+.task-title { font: 600 18px/1.3 var(--font-display); color: var(--ink); margin-bottom: 8px; letter-spacing: -0.01em; }
+.task p { margin: 0; font-size: 14.5px; line-height: 1.55; color: #5b625b; }
+.price-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 22px; align-items: stretch; }
+.price-main { display: flex; flex-direction: column; gap: 6px; }
+.price-big { font: 600 clamp(44px, 5vw, 60px)/1 var(--font-display); letter-spacing: -0.04em; color: var(--gold); margin: 10px 0 12px; font-variant-numeric: tabular-nums; }
+.price-from { font: 400 13px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: #8e939b; vertical-align: middle; margin-right: 6px; }
+.price-per { font: 500 18px/1 var(--font-body); letter-spacing: 0; color: #a9adb4; }
+.price-main .btn { align-self: flex-start; margin-top: 18px; }
+.included { background: var(--cream-panel); border: 1px solid rgba(11, 14, 19, 0.1); border-radius: 18px; padding: 34px; }
+.included-title { font: 400 11px/1.2 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 18px; }
+.included ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.included li { position: relative; padding-left: 30px; font-size: 15.5px; line-height: 1.45; color: var(--ink); }
+.included li::before {
+  content: ""; position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D8C39B' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.faq-wrap { max-width: 860px; }
+.faq { display: grid; gap: 12px; }
+.faq details { background: var(--cream-panel); border: 1px solid rgba(11, 14, 19, 0.1); border-radius: 14px; padding: 0 22px; }
+.faq summary {
+  cursor: pointer; list-style: none; padding: 20px 30px 20px 0; position: relative;
+  font: 600 17px/1.35 var(--font-display); color: var(--ink); letter-spacing: -0.01em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 0; top: 16px; font: 400 24px/1 var(--font-body); color: var(--gold-deep); transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; border-radius: 6px; }
+.faq details p { margin: 0 0 20px; font-size: 15.5px; line-height: 1.6; color: #50545b; max-width: 68ch; }
+.pillar-link { color: var(--gold-deep); font-weight: 600; text-decoration: none; }
+.pillar-link:hover { text-decoration: underline; }
+@media (max-width: 1024px) { .task-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 760px) { .task-grid, .price-grid { grid-template-columns: 1fr; } .included { padding: 26px 22px; } }
+
 /* ============ Work gallery ============ */
 .work-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
 .chip {
