@@ -37,6 +37,11 @@
       pic.decoding = 'async';
       pic.width = 960; pic.height = 600;
       shot.appendChild(pic);
+      if (!url) {
+        // Private work: the screenshot has every name and number blurred out.
+        shot.classList.add('is-private');
+        shot.appendChild(el('span', 'work-private', 'Private · details hidden'));
+      }
     } else {
       shot.classList.add('no-shot');
       var badge = el('div', 'work-lock');
