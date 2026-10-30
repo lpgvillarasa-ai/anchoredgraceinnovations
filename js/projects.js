@@ -79,13 +79,13 @@ window.AGI_PROJECTS = [
   {
     name: 'Donna', group: 'product', kind: 'AI assistant',
     line: 'A voice-first AI executive assistant that keeps the calendar, the notes and the open loops.',
-    tags: ['AI', 'Voice', 'Productivity'], show: true,
+    tags: ['AI', 'Voice', 'Productivity'], img: 'media/work/donna.jpg', show: true,
   },
 
   {
     name: 'Agency sales pipeline', group: 'product', kind: 'Web app',
     line: 'Our own CRM: every client from first call to final payment, with referral commissions.',
-    tags: ['CRM', 'Sales'], show: true,
+    tags: ['CRM', 'Sales'], img: 'media/work/agency-pipeline.jpg', show: true,
   },
   // ---------- Private systems (general names only) ----------
   {
@@ -101,7 +101,7 @@ window.AGI_PROJECTS = [
   {
     name: 'Home health agency suite', group: 'system', kind: 'Web apps',
     line: 'HR, a field-sales CRM with geo check-ins and an executive dashboard for a US care agency.',
-    tags: ['Healthcare', 'CRM', 'HR'], show: true,
+    tags: ['Healthcare', 'CRM', 'HR'], img: 'media/work/home-health-suite.jpg', show: true,
   },
   {
     name: 'Restaurant POS and payroll', group: 'system', kind: 'Web app',
@@ -111,7 +111,7 @@ window.AGI_PROJECTS = [
   {
     name: 'Retail POS and inventory', group: 'system', kind: 'Web app',
     line: 'Checkout and stock tracking for a specialty grocery in Cebu City.',
-    tags: ['Retail', 'POS'], show: true,
+    tags: ['Retail', 'POS'], img: 'media/work/retail-pos.jpg', show: true,
   },
 
   // ---------- Built, not public yet ----------
