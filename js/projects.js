@@ -14,6 +14,10 @@
      img      a screenshot saved in media/work (1280x800 page, jpg)
      show     false hides it from the site without deleting it
 
+   Rule: only our own work. Every url must be proven ours: a domain or
+   lpg-villarasa.workers.dev address on our Cloudflare account, or a link on
+   Lee's own portfolio (leevillarasa.xyz). Never take an address from a
+   README alone.
    Rule: a client's name goes up only once their site is public. Private
    systems hold real people's data, so they are described, never opened.
    ========================================================================== */
@@ -54,8 +58,8 @@ window.AGI_PROJECTS = [
   // ---------- Our own products ----------
   {
     name: 'Stewardly AI', group: 'product', kind: 'AI product',
-    line: 'See your household net worth over decades and model the life decisions that shape it.',
-    tags: ['AI', 'Finance', 'Mobile'], url: 'https://stewardly.app', img: 'media/work/stewardly.jpg', show: true,
+    line: 'Its AI reads your bills, loans and subscriptions in seconds, then reminds you before anything is due.',
+    tags: ['AI', 'Finance', 'Mobile'], url: 'https://stewardlyai.com', img: 'media/work/stewardly.jpg', show: true,
   },
   {
     name: 'FaithFlow AI', group: 'product', kind: 'AI product',
@@ -105,11 +109,13 @@ window.AGI_PROJECTS = [
     tags: ['Retail', 'POS'], show: true,
   },
 
-  // ---------- Built, not public yet (flip show to true when they launch) ----------
-  { name: 'Bitalyze', group: 'live', kind: 'Website', line: 'App download site.', tags: ['App'], url: 'https://bitalyze.com', show: false },
-  { name: 'Custom Canvas Ph', group: 'live', kind: 'Online shop', line: 'Made-to-order canvases with instant pricing.', tags: ['E-commerce'], url: 'https://customcanvasph.com', show: false },
-  { name: 'Rochar Artisan Gelato', group: 'live', kind: 'Website', line: 'A minimalist gelato brand site.', tags: ['Food & drink'], url: 'https://rochargelato.com', show: false },
-  { name: 'KinderWellness', group: 'live', kind: 'Website', line: 'An airway-first dental practice site in Brooklyn.', tags: ['Healthcare', 'USA'], url: 'https://www.kinderwellness.com', show: false },
+  // ---------- Built, not public yet ----------
+  // Before showing one: add its url, and only after confirming that address is
+  // really our build (on our Cloudflare account or linked from Lee's portfolio).
+  { name: 'Bitalyze', group: 'live', kind: 'Website', line: 'App download site.', tags: ['App'], show: false },
+  { name: 'Custom Canvas Ph', group: 'live', kind: 'Online shop', line: 'Made-to-order canvases with instant pricing.', tags: ['E-commerce'], show: false },
+  { name: 'Rochar Artisan Gelato', group: 'live', kind: 'Website', line: 'A minimalist gelato brand site.', tags: ['Food & drink'], show: false },
+  { name: 'KinderWellness', group: 'live', kind: 'Website', line: 'An airway-first dental practice site in Brooklyn.', tags: ['Healthcare', 'USA'], show: false },
 ];
 
 /* Videos for the "Marketing videos" section. The section stays hidden until
