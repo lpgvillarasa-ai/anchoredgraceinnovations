@@ -4,6 +4,7 @@ import HeroSection from '@/components/hero/HeroSection';
 import BuiltWith from '@/components/BuiltWith';
 import ServicesBento from '@/components/services/ServicesBento';
 import DemosSection from '@/components/DemosSection';
+import ConceptCards from '@/components/ConceptCards';
 import PageHead from '@/components/PageHead';
 import { readFragments, type Fragments } from '@/lib/legacy';
 
@@ -39,7 +40,7 @@ export default function Home({ f }: { f: Fragments }) {
         <Legacy html={f['02-film']} />
         <ServicesBento />
         <DemosSection />
-        <Legacy html={f['04-concepts']} />
+        <ConceptCards />
         <Legacy html={f['05-work']} />
         <Legacy html={f['06-videos']} />
         <Legacy html={f['07-talent']} />
