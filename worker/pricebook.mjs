@@ -3,14 +3,17 @@
 // and estimate() below does all the math. Change a price here, nowhere else.
 //
 // php / usd: [low, high]. A missing currency means "not offered in that market".
+// 'call' means offered there, with the price confirmed on a discovery call.
 // billing: 'once' (one-time project), 'month' (every month), 'each' (per unit).
 
-export const PRICE_BOOK_VERSION = '2026-10-31 draft 4 (approved)';
+export const PRICE_BOOK_VERSION = '2026-10-31 draft 5 (approved)';
 
 export const ITEMS = {
   // ----- Build -----
-  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [15000, 30000], usd: [1200, 2500], weeks: '1-2' },
-  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', php: [60000, 120000], usd: [4000, 9000], weeks: '3-6' },
+  // Philippine website prices set to the Cebu market (Lee 2026-10-31): a business
+  // website from ₱35,000, and a landing page always below that.
+  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [15000, 25000], usd: [1200, 2500], weeks: '1-2' },
+  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', php: [35000, 90000], usd: [4000, 9000], weeks: '3-6' },
   premium_website: { group: 'Build', label: 'Premium / animated website', billing: 'once', php: [150000, 300000], usd: [10000, 25000], weeks: '6-12' },
   booking_website: { group: 'Build', label: 'Website with online booking', billing: 'once', php: [80000, 180000], usd: [5000, 12000], weeks: '4-8' },
   online_shop: { group: 'Build', label: 'Online shop (e-commerce)', billing: 'once', php: [100000, 220000], usd: [6000, 15000], weeks: '4-10' },
@@ -35,14 +38,14 @@ export const ITEMS = {
   ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', php: [60000, 120000], usd: [3000, 6000] },
 
   // ----- Staff (full time, priced in steps by role, Lee 2026-10-31) -----
-  // Overseas: from $1,199, working the client's hours. Philippines: from ₱35,000,
-  // Philippine daytime hours, the same ladder scaled to pesos.
-  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', php: [41000, 55500], usd: [1399, 1899] },
-  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', php: [52500, 70000], usd: [1799, 2399] },
-  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', php: [44000, 61500], usd: [1499, 2099] },
-  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', php: [38000, 49500], usd: [1299, 1699] },
-  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', php: [35000, 44000], usd: [1199, 1499] },
-  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', php: [38000, 52500], usd: [1299, 1799] },
+  // Overseas: from $1,499, working the client's hours (every role up $300, Lee
+  // 2026-10-31). Philippines: Philippine daytime hours, price confirmed on a call.
+  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', php: 'call', usd: [1699, 2199] },
+  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', php: 'call', usd: [2099, 2699] },
+  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', php: 'call', usd: [1799, 2399] },
+  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', php: 'call', usd: [1599, 1999] },
+  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', php: 'call', usd: [1499, 1799] },
+  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', php: 'call', usd: [1599, 2099] },
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', php: [1500, 4000], usd: [60, 150] },
@@ -96,6 +99,10 @@ export function estimate({ client_region, items }) {
     if (id === 'system_care') { wantsSystemCare = true; continue; }
     const range = item[key];
     if (!range) { problems.push(`"${item.label}" is not offered in ${currency}.`); continue; }
+    if (range === 'call') {
+      lines.push({ item_id: id, label: item.label, billing: 'call', low: null, high: null, range: 'Price confirmed on a free discovery call', weeks: item.weeks || null });
+      continue;
+    }
     const qty = item.billing === 'each' ? Math.min(Math.max(parseInt(raw.quantity, 10) || 1, 1), MAX_QUANTITY) : 1;
     const low = range[0] * qty, high = range[1] * qty;
     if (item.billing === 'month') { monthLow += low; monthHigh += high; }
