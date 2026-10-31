@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://anchoredgraceinnovation.com/sitemap.xml

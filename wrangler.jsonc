@@ -1,0 +1,26 @@
+// Publishing settings for anchoredgraceinnovation.com (Cloudflare Worker "agi-website").
+// Publish from this folder:  npm install && npm run build && npx wrangler deploy
+// Secrets (set once in Cloudflare: Workers > agi-website > Settings > Variables and Secrets):
+//   ANTHROPIC_API_KEY  the AI key (Lee's Anthropic account, with a monthly spending cap)
+//   TURNSTILE_SECRET   the human-check secret
+//   IP_SALT            random text used to fingerprint visitors without storing their IP
+//   ADMIN_PASSWORD     password for /admin/leads (the enquiries list)
+{
+  "name": "agi-website",
+  "main": "dist/worker.js",
+  "no_bundle": true,
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "anchoredgraceinnovation.com", "custom_domain": true },
+    { "pattern": "www.anchoredgraceinnovation.com", "custom_domain": true }
+  ],
+  "durable_objects": { "bindings": [{ "name": "ESTIMATOR", "class_name": "EstimatorStore" }] },
+  // The homepage film's pictures live in our own storage, folder film/ (see worker/film.mjs).
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "agi-website-media" }],
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["EstimatorStore"] }],
+  "vars": {
+    "TURNSTILE_SITE_KEY": "",
+    "ESTIMATOR_MODEL": "claude-opus-5-5"
+  }
+}
