@@ -93,7 +93,7 @@ export function redactPersonal(text) {
 }
 
 // Every amount of money in a reply must come from the price book tool's results
-// in this chat (or the public "from $1,499" staffing price). Anything else is
+// in this chat (or the public "from $1,199" staffing price). Anything else is
 // never shown to the visitor.
 const MONEY_RE = /(?:₱|PHP\s?|USD\s?|\$|P(?=\d))\s?(\d[\d,]*(?:\.\d+)?)\s?(k|K)?|(\d[\d,]*(?:\.\d+)?)\s?(k|K)?\s?(?:pesos?|php|usd|dollars?)\b/gi;
 function amounts(text) {
@@ -107,7 +107,7 @@ function amounts(text) {
   return found;
 }
 export function allowedAmounts(messages) {
-  const allowed = new Set([1499]);
+  const allowed = new Set([1199]);
   for (const m of messages) {
     if (m.role !== 'user' || !Array.isArray(m.content)) continue;
     for (const b of m.content) {

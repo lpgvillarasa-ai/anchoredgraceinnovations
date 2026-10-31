@@ -5,11 +5,11 @@
 // php / usd: [low, high]. A missing currency means "not offered in that market".
 // billing: 'once' (one-time project), 'month' (every month), 'each' (per unit).
 
-export const PRICE_BOOK_VERSION = '2026-10-30 draft 2 (approved)';
+export const PRICE_BOOK_VERSION = '2026-10-31 draft 3 (approved)';
 
 export const ITEMS = {
   // ----- Build -----
-  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [18000, 35000], usd: [1200, 2500], weeks: '1-2' },
+  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [15000, 30000], usd: [1200, 2500], weeks: '1-2' },
   business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', php: [60000, 120000], usd: [4000, 9000], weeks: '3-6' },
   premium_website: { group: 'Build', label: 'Premium / animated website', billing: 'once', php: [150000, 300000], usd: [10000, 25000], weeks: '6-12' },
   booking_website: { group: 'Build', label: 'Website with online booking', billing: 'once', php: [80000, 180000], usd: [5000, 12000], weeks: '4-8' },
@@ -23,7 +23,7 @@ export const ITEMS = {
   multi_module_system: { group: 'Build', label: 'Multi-module business system', billing: 'once', php: [700000, 1500000], usd: [35000, 80000], weeks: '16-26', system: true },
 
   // ----- Automate -----
-  ai_chat_assistant_setup: { group: 'Automate', label: 'AI chat assistant for your website (setup)', billing: 'once', php: [25000, 60000], usd: [2500, 6000], weeks: '1-3' },
+  ai_chat_assistant_setup: { group: 'Automate', label: 'AI chat assistant for your website (setup)', billing: 'once', php: [20000, 45000], usd: [1000, 3500], weeks: '1-3' },
   ai_chat_assistant_monthly: { group: 'Automate', label: 'AI chat assistant (monthly running and care)', billing: 'month', php: [3000, 7000], usd: [150, 400] },
   ai_feature: { group: 'Automate', label: 'AI added to an existing system (one feature)', billing: 'once', php: [80000, 250000], usd: [5000, 15000], weeks: '2-6' },
   automation_single: { group: 'Automate', label: 'Workflow automation (single workflow)', billing: 'once', php: [15000, 35000], usd: [600, 1500], weeks: '0.5-2' },
@@ -34,13 +34,13 @@ export const ITEMS = {
   ai_training_half_day: { group: 'Automate', label: 'AI staff training, half day', billing: 'once', php: [30000, 60000], usd: [1500, 3000] },
   ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', php: [60000, 120000], usd: [3000, 6000] },
 
-  // ----- Staff (US businesses only, full time, from $1,499) -----
-  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1499, 2000], usOnly: true },
-  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [1900, 2600], usOnly: true },
-  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1500, 2200], usOnly: true },
-  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1499, 1800], usOnly: true },
-  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1499, 1700], usOnly: true },
-  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1499, 1900], usOnly: true },
+  // ----- Staff (US businesses only, full time, from $1,199; priced in steps by role, Lee 2026-10-31) -----
+  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1399, 1899], usOnly: true },
+  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [1799, 2399], usOnly: true },
+  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1499, 2099], usOnly: true },
+  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1299, 1699], usOnly: true },
+  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1199, 1499], usOnly: true },
+  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1299, 1799], usOnly: true },
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', php: [1500, 4000], usd: [60, 150] },
