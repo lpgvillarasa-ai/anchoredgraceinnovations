@@ -21,9 +21,10 @@
    Never take an address from a README alone.
    Rule: never show a hosting company's address (workers.dev, vercel.app,
    netlify.app, pages.dev). A site without its own domain gets a subdomain
-   of ours instead, e.g. kfitness.anchoredgraceinnovation.com (Cloudflare:
+   of ours instead, e.g. clientname.anchoredgraceinnovation.com (Cloudflare:
    Workers > the site > Settings > Domains > Add custom domain).
-   Rule: a client's name goes up only once their site is public. Private
+   Rule: a client's name goes up only once their site is public and they have
+   agreed to be shown; until then, a general name, a blurred preview, no link. Private
    systems hold real people's data, so they are described, never opened.
    ========================================================================== */
 
@@ -45,14 +46,16 @@ window.AGI_PROJECTS = [
     tags: ['Events', 'Ticketing', 'Church'], url: 'https://ckworldharvest.org', img: 'media/work/ck12.jpg', show: true,
   },
   {
-    name: 'KFitness PH', group: 'live', kind: 'Website',
-    line: 'A bold site for a 24/7 gym chain across Metro Cebu: branches, plans and sign-ups.',
-    tags: ['Fitness', 'Multi-branch'], url: 'https://kfitness.anchoredgraceinnovation.com', img: 'media/work/kfitness.jpg', show: true,
+    // Client name withheld until they agree to be shown (Lee, 31 Oct 2026): general name, blurred preview, no link.
+    name: 'Multi-branch gym website', group: 'live', kind: 'Website',
+    line: 'A bold site for a 24/7 gym with several branches: locations, membership plans and free-trial sign-ups.',
+    tags: ['Fitness', 'Multi-branch'], img: 'media/work/fitness-site.jpg', show: true,
   },
   {
-    name: 'Supreme Pickle Court', group: 'live', kind: 'Booking app',
-    line: 'Players book court-hours online; the owner runs the courts from one workspace.',
-    tags: ['Sports', 'Booking'], url: 'https://supremepicklecourt.anchoredgraceinnovation.com', img: 'media/work/supreme-pickle.jpg', show: true,
+    // Client name withheld until they agree to be shown (Lee, 31 Oct 2026): general name, blurred preview, no link.
+    name: 'Sports court booking app', group: 'live', kind: 'Booking app',
+    line: 'Players book court time online; the owner runs every court from one workspace.',
+    tags: ['Sports', 'Booking'], img: 'media/work/court-booking.jpg', show: true,
   },
   {
     name: 'Ruje Café', group: 'live', kind: 'Website',
