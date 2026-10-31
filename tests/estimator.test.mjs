@@ -25,12 +25,13 @@ test('US client gets dollars, and one-time and monthly are kept apart', () => {
   assert.equal(e.monthly, '$200 to $400 a month');
 });
 
-test('staffing is US only, never quoted to Philippine or other clients', () => {
+test('staffing is for businesses outside the Philippines, never quoted to Philippine clients', () => {
   const ph = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
   assert.equal(ph.ok, false);
-  assert.match(ph.problems.join(' '), /US businesses only/);
+  assert.match(ph.problems.join(' '), /outside the Philippines only/);
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
-  assert.equal(other.ok, false);
+  assert.equal(other.ok, true);
+  assert.equal(other.monthly, '$1,299 to $1,699 a month');
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
   assert.equal(us.monthly, '$1,399 to $1,899 a month');
 });
@@ -118,13 +119,13 @@ test('a bad tool request goes back to the AI as an error, not a price', async ()
     { stop_reason: 'tool_use', content: [
       { type: 'tool_use', id: 'tu_2', name: 'prepare_estimate', input: { client_region: 'philippines', items: [{ item_id: 'staff_admin', quantity: 1 }], project_summary: 'Admin staff' } },
     ] },
-    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Our staffing is for US businesses only.' }] },
+    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Our staffing is for businesses outside the Philippines.' }] },
   ]);
   const out = await runTurn(client, {}, [{ role: 'user', content: 'I need an admin assistant for my shop in Cebu' }]);
   assert.equal(out.estimate, null);
   const result = client.calls[1].messages.at(-1).content[0];
   assert.equal(result.is_error, true);
-  assert.match(result.content, /US businesses only/);
+  assert.match(result.content, /outside the Philippines only/);
 });
 
 test('a refusal is reported so nothing is stored', async () => {

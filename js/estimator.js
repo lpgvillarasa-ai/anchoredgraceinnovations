@@ -8,7 +8,7 @@
     'I need a website for my business',
     'I need a custom app or system',
     'I want to add AI to my business',
-    'I need admin staff for my US business',
+    'I need a full-time remote assistant',
   ];
   var state = { config: null, sessionId: null, starting: null, busy: false, lastEstimate: null, listening: false, agreed: false };
 
