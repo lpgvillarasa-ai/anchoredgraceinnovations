@@ -64,20 +64,44 @@ Then visit http://localhost:8000.
 
 ## Publishing
 
-The site runs on Cloudflare as the Worker `agi-website`. It is **not** published
-automatically from GitHub; publishing is a deliberate step:
+The site and the estimate assistant run on Cloudflare as one Worker, `agi-website`.
+It is **not** published automatically from GitHub; publishing is a deliberate step:
 
 ```sh
+npm install
+npm test
+npm run build
 npx wrangler deploy
 ```
 
-If asset upload is not possible (some sandboxes), `node tools/bundle-worker.mjs > worker.js`
-packs the whole site into one script that can be uploaded instead.
+`npm run build` packs every **git-tracked** site file (minus `.assetsignore`) together with
+the assistant into `dist/worker.js`, so nothing unreviewed or private can go live by accident.
 
-`.assetsignore` keeps these notes and the agent files off the public site.
+## Estimate assistant
+
+A chat window ("Get an estimate") where visitors describe what they need and get a price
+range. How it stays safe and cheap:
+
+- **Prices come only from the approved price book** in `worker/pricebook.mjs`. The AI picks
+  items; the server does the math. The AI never states a number of its own.
+- **Topic-locked:** it only talks about our services and estimates (`worker/prompt.mjs`).
+- **Bot protection:** Cloudflare's human check before a chat starts, same-site requests only,
+  3 chats per visitor per day, 12 messages per chat, 6 messages a minute, 150 chats and
+  1,500 messages a day site-wide, 800 characters per message. Change limits with Worker
+  variables (`ESTIMATOR_SESSIONS_PER_DAY` and friends, see `worker/estimator.mjs`).
+- **Cost control:** the instructions and price book are cached by the AI provider, effort is
+  set low for chat, and Lee sets a hard monthly spending cap on the Anthropic account.
+- **Privacy:** visitors' IP addresses are never stored, only a salted fingerprint. Names and
+  emails are kept only when a visitor fills in the form and ticks consent.
+- **Enquiries:** visitors who leave their details appear at `/admin/leads` (password in the
+  `ADMIN_PASSWORD` secret). The "Book a free call" link opens Calendly pre-filled with their
+  name, email and estimate.
+- The window only appears when `ANTHROPIC_API_KEY`, `TURNSTILE_SITE_KEY` and
+  `TURNSTILE_SECRET` are set. Set `ESTIMATOR=off` to hide it instantly.
+
+Code: `worker/` (server), `js/estimator.js` (chat window), `tests/` (`npm test`).
 
 ## Coming next
 
-- Phase 2: an AI estimate assistant that only talks about our services and only
-  quotes from the price book Lee approves, with bot protection and spending caps.
-- Phase 3: safe demo copies of our own products on fake data, and tap-to-talk.
+- AGIbnb (the rebranded stays app) as a public demo at agibnb.anchoredgraceinnovation.com.
+- Email alerts to Lee when a visitor leaves an enquiry (today they appear at `/admin/leads`).
