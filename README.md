@@ -7,7 +7,7 @@ lands: our services, our work, and a button to book a discovery call.
 
 Homepage, top to bottom: the hero with a "pick your business" switcher, a "Built with"
 strip, the Anchored / Built / Staffed film, six working service tiles, "Try it live"
-demos, concept sites with preview clips, Our work, the founder, our promises, marketing
+demos, concept sites with preview clips, Our work, our promises, marketing
 videos, staffing, how it works, ways to work with us, questions, and contact (with a
 note form). Other pages: `/staffing`, three case studies at `/work/<name>`, `/privacy`.
 
@@ -52,7 +52,7 @@ Next.js (Pages Router) with TypeScript and Tailwind, built into plain files. Not
 on a Next.js server: the Cloudflare Worker serves the built files.
 
 - `pages/`: one file per page (`index.tsx`, `staffing.tsx`, `work/[slug].tsx`, `privacy.tsx`)
-- `components/`: the newer sections (hero switcher, service tiles, demos, founder, FAQ, contact form...)
+- `components/`: the newer sections (hero switcher, service tiles, demos, FAQ, contact form...)
 - `legacy/`: sections carried over unchanged from the hand-written site, as plain HTML
 - `public/js/`: the original scripts that still drive those sections (menu, reveal, work
   rail, film, estimate chat). `pages/_app.tsx` starts them once React has started.

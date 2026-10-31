@@ -24,7 +24,7 @@ export default function PromisesSection() {
   return (
     <section aria-labelledby="promises-title" className="tw:bg-deep tw:px-[var(--gutter)] tw:py-24 tw:sm:py-28" data-nav-dark="">
       <div className="tw:mx-auto tw:max-w-[1200px]">
-        <div className="kicker gold">06 / OUR PROMISES</div>
+        <div className="kicker gold">05 / OUR PROMISES</div>
         <h2 id="promises-title" className="h2 tw:text-cream">What you can count on.</h2>
         <ul className="tw:m-0 tw:mt-12 tw:grid tw:gap-4 tw:p-0 tw:[list-style:none] tw:sm:grid-cols-2 tw:lg:grid-cols-4 tw:lg:gap-5">
           {PROMISES.map((p) => (

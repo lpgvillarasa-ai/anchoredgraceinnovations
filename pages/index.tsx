@@ -5,7 +5,6 @@ import BuiltWith from '@/components/BuiltWith';
 import ServicesBento from '@/components/services/ServicesBento';
 import DemosSection from '@/components/DemosSection';
 import ConceptCards from '@/components/ConceptCards';
-import FounderSection from '@/components/FounderSection';
 import PromisesSection from '@/components/PromisesSection';
 import ContactSection from '@/components/ContactSection';
 import FaqSection, { FAQ_JSON_LD } from '@/components/FaqSection';
@@ -46,7 +45,6 @@ export default function Home({ f }: { f: Fragments }) {
         <DemosSection />
         <ConceptCards />
         <Legacy html={f['05-work']} />
-        <FounderSection />
         <PromisesSection />
         <Legacy html={f['06-videos']} />
         <Legacy html={f['07-talent']} />

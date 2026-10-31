@@ -22,7 +22,7 @@ export default function FaqSection() {
     <section id="faq" className="section">
       <div className="container tw:grid tw:gap-10 tw:lg:grid-cols-[0.8fr_1.2fr] tw:lg:gap-16">
         <div>
-          <div className="kicker">09 / QUESTIONS</div>
+          <div className="kicker">08 / QUESTIONS</div>
           <h2 className="h2">What owners usually ask.</h2>
         </div>
         <div className="tw:border-t tw:border-ink/15">
