@@ -55,10 +55,8 @@
   }
 
   // ---------- Drawing ----------
-  // Sharpness cap: 2x on computers, 1.5x on phones. A phone screen cannot show the
-  // difference, and drawing fewer pixels on every scroll step keeps scrolling smooth.
   function sizeCanvas() {
-    var dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth <= 720 ? 1.5 : 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = Math.round(canvas.clientWidth * dpr);
     var h = Math.round(canvas.clientHeight * dpr);
     if (canvas.width !== w || canvas.height !== h) {
