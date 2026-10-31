@@ -24,8 +24,10 @@
    of ours instead, e.g. clientname.anchoredgraceinnovation.com (Cloudflare:
    Workers > the site > Settings > Domains > Add custom domain).
    Rule: a client's name goes up only once their site is public and they have
-   agreed to be shown; until then, a general name, a blurred preview, no link. Private
-   systems hold real people's data, so they are described, never opened.
+   agreed to be shown; until then, a general name, a blurred preview, no link.
+   Rule: we never show real client data. Private systems are described with
+   sample data only, never linked or opened, and nothing may say we show them
+   with real data (not even on a call).
    ========================================================================== */
 
 window.AGI_PROJECTS = [

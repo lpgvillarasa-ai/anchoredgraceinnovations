@@ -41,7 +41,7 @@
       if (!url) {
         // Private work: the screenshot has every name and number blurred out.
         shot.classList.add('is-private');
-        shot.appendChild(el('span', 'work-private', 'Private · details hidden'));
+        shot.appendChild(el('span', 'work-private', 'Sample data only'));
       }
     } else {
       shot.classList.add('no-shot');
@@ -58,7 +58,7 @@
   }
 
   function ctaText(p, url) {
-    return url ? 'Visit live site' : (p.group === 'system' ? 'Walkthrough on a call' : 'Demo on a call');
+    return url ? 'Visit live site' : (p.group === 'system' ? 'Ask about it on a call' : 'Demo on a call');
   }
 
   function card(p, index) {
@@ -279,7 +279,7 @@
       go.target = '_blank';
       go.rel = 'noopener';
       body.appendChild(go);
-      if (!url) body.appendChild(el('p', 'work-dialog-note', p.group === 'system' ? 'This system holds real people\u2019s data, so we show it on a call instead.' : 'We walk you through it on a short call.'));
+      if (!url) body.appendChild(el('p', 'work-dialog-note', p.group === 'system' ? 'A private client system. We never show real client data: this preview uses sample data only, with names and numbers blurred.' : 'We walk you through it on a short call.'));
       inner.appendChild(close);
       inner.appendChild(big);
       inner.appendChild(body);

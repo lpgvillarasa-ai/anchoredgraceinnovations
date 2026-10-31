@@ -20,7 +20,7 @@ set `show: false`. To show a site that just launched, set `show: true`.
 
 Rules we follow:
 - A client's name appears only once their site is public.
-- Private systems hold real people's data: we describe them, never link or open them.
+- We never show real client data. Private systems are shown with sample data only, never linked or opened.
 - Screenshots live in `public/media/work/` and are stored with the site, not loaded from
   another company's service.
 
