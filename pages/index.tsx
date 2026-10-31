@@ -5,6 +5,7 @@ import BuiltWith from '@/components/BuiltWith';
 import ServicesBento from '@/components/services/ServicesBento';
 import DemosSection from '@/components/DemosSection';
 import ConceptCards from '@/components/ConceptCards';
+import FounderSection from '@/components/FounderSection';
 import PageHead from '@/components/PageHead';
 import { readFragments, type Fragments } from '@/lib/legacy';
 
@@ -42,6 +43,7 @@ export default function Home({ f }: { f: Fragments }) {
         <DemosSection />
         <ConceptCards />
         <Legacy html={f['05-work']} />
+        <FounderSection />
         <Legacy html={f['06-videos']} />
         <Legacy html={f['07-talent']} />
         <Legacy html={f['08-process']} />

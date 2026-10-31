@@ -256,7 +256,7 @@
           if (link) link.classList.add('active');
         });
       }, { rootMargin: '-45% 0px -50% 0px' });
-      ['services', 'talent', 'process', 'pricing'].forEach((id) => {
+      ['services', 'work', 'founder', 'talent', 'process', 'pricing'].forEach((id) => {
         const section = document.getElementById(id);
         if (section) spy.observe(section);
       });
