@@ -106,7 +106,10 @@ range. How it stays safe and cheap:
 
 Code: `worker/` (server), `js/estimator.js` (chat window), `tests/` (`npm test`).
 
+## Homepage film
+
+The scroll film under the hero is explained in [docs/film.md](docs/film.md): where its pictures live, how to swap or hide it, and how it was made.
+
 ## Coming next
 
-- AGIbnb (the rebranded stays app) as a public demo at agibnb.anchoredgraceinnovation.com.
 - Email alerts to Lee when a visitor leaves an enquiry (today they appear at `/admin/leads`).
