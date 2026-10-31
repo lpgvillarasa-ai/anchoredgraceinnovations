@@ -936,14 +936,69 @@ body {
 .work-grid::-webkit-scrollbar { display: none; }
 .work-grid:focus { outline: none; }
 .work-grid .work-card { scroll-snap-align: start; }
+.work-grid { cursor: grab; }
+.work-grid.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; }
+.work-grid.is-dragging .work-hit { cursor: grabbing; }
 .work-track { height: 2px; background: rgba(11, 14, 19, 0.1); border-radius: 2px; overflow: hidden; margin-top: 4px; }
 .work-track-fill { display: block; height: 100%; width: 100%; background: var(--gold-deep); transform-origin: left center; transform: scaleX(0.2); transition: transform .15s linear; }
 .work-card {
-  display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: inherit;
+  /* Angled toward the middle of the row (set by js/work.js); the card you point
+     at, or reach with the keyboard, turns to face you and lifts. */
+  --ry: var(--ry-auto, 0deg); --tz: var(--tz-auto, 0px); --op: var(--op-auto, 1);
+  position: relative; display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: inherit;
   background: var(--cream-panel); border: 1px solid rgba(11, 14, 19, 0.1); border-radius: 16px;
-  transition: transform .35s var(--ease-out), box-shadow .35s, border-color .35s;
+  transform: perspective(1200px) rotateY(var(--ry)) translateZ(var(--tz));
+  opacity: var(--op);
+  transition: transform .5s var(--ease-out), box-shadow .4s, border-color .4s, opacity .4s;
+  will-change: transform;
 }
-a.work-card:hover { transform: translateY(-6px); border-color: rgba(216, 195, 155, 0.55); box-shadow: 0 28px 60px -30px rgba(11, 14, 19, 0.4); }
+.work-card.is-front {
+  --ry: 0deg; --tz: 34px; --op: 1;
+  border-color: rgba(216, 195, 155, 0.7); box-shadow: 0 34px 70px -34px rgba(11, 14, 19, 0.5);
+}
+.work-frame { margin: 10px 10px 0; border-radius: 11px; overflow: hidden; background: #0f1218; border: 1px solid rgba(11, 14, 19, 0.14); }
+.work-chrome { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; background: #171b22; }
+.work-chrome i { width: 8px; height: 8px; border-radius: 50%; background: rgba(244, 241, 235, 0.2); flex: none; }
+.work-url {
+  margin-left: 8px; flex: 1; min-width: 0; height: 18px; border-radius: 6px; padding: 0 9px;
+  background: rgba(244, 241, 235, 0.07); color: rgba(244, 241, 235, 0.62);
+  font: 400 10.5px/18px var(--font-mono); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.work-hit { position: absolute; inset: 0; z-index: 5; background: transparent; border: 0; padding: 0; cursor: pointer; border-radius: 16px; }
+.work-hit:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.work-card .work-cta { color: var(--ink); font-weight: 600; }
+
+/* The large preview window. */
+.work-dialog { padding: 0; border: 0; background: transparent; width: min(1120px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); overflow: visible; color: var(--ink); }
+.work-dialog::backdrop { background: rgba(7, 9, 12, 0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.work-dialog-inner {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); align-items: center;
+  background: var(--cream-panel); border-radius: 22px; padding: 14px; gap: 6px;
+  box-shadow: 0 50px 120px -40px rgba(0, 0, 0, 0.7);
+  max-height: calc(100dvh - 32px); overflow-y: auto;
+}
+.work-dialog .work-frame { margin: 0; }
+.work-dialog .work-shot { aspect-ratio: 16 / 10; }
+.work-dialog-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 22px 22px 26px; }
+.work-dialog-kicker { font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gold-deep); }
+.work-dialog-title { font: 600 clamp(24px, 2.6vw, 32px)/1.15 var(--font-display); letter-spacing: -0.02em; margin: 0; }
+.work-dialog-line { font-size: 16px; line-height: 1.6; color: #50545b; margin: 0; }
+.work-dialog-go { margin-top: 8px; }
+.work-dialog-note { font-size: 13px; color: #7a7f87; margin: 0; }
+.work-dialog-close {
+  position: absolute; top: 22px; right: 22px; z-index: 3; width: 40px; height: 40px; border-radius: 999px; cursor: pointer;
+  display: grid; place-items: center; background: rgba(11, 14, 19, 0.72); color: var(--cream-text); border: 1px solid rgba(216, 195, 155, 0.35);
+}
+.work-dialog-close:focus-visible, .work-dialog-go:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+html.work-dialog-open { overflow: hidden; }
+@media (max-width: 820px) {
+  .work-dialog-inner { grid-template-columns: 1fr; padding: 10px; }
+  .work-dialog-body { padding: 18px 12px 12px; }
+  .work-dialog-close { top: 16px; right: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card { transform: none; opacity: 1; transition: border-color .2s; }
+}
 .work-card[hidden] { display: none; }
 .work-shot { position: relative; aspect-ratio: 16 / 10; background: var(--ink); overflow: hidden; }
 .work-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; z-index: 1; }
@@ -968,7 +1023,7 @@ a.work-card:hover { transform: translateY(-6px); border-color: rgba(216, 195, 15
 .work-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 .work-tag { font-size: 12px; color: var(--ink); background: var(--cream-band); border-radius: 6px; padding: 4px 9px; }
 .work-cta { margin-top: auto; padding-top: 10px; font-weight: 600; font-size: 14px; color: var(--ink); }
-.work-system .work-cta, .work-card:not(a) .work-cta { color: #7a817a; font-weight: 500; }
+/* Every card now opens a preview, so every card has the same call to action. */
 .work-noscript { color: #5b625b; }
 
 /* ============ Videos ============ */
