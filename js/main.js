@@ -76,21 +76,33 @@
     const progress = document.createElement('div');
     progress.className = 'nav-progress';
     progress.setAttribute('aria-hidden', 'true');
-    nav.appendChild(progress);
+    (nav.querySelector('.nav-inner') || nav).appendChild(progress);
+    // Dark glass while the header floats over a dark section.
+    const darkZones = document.querySelectorAll('[data-nav-dark]');
     let scrollQueued = false;
     const onScrollFrame = () => {
       scrollQueued = false;
       const y = window.scrollY || 0;
       nav.classList.toggle('scrolled', y > 24);
+      const probe = 40;
+      let onDark = false;
+      darkZones.forEach((z) => {
+        if (z.hidden) return;
+        const r = z.getBoundingClientRect();
+        if (r.top <= probe && r.bottom >= probe) onDark = true;
+      });
+      nav.classList.toggle('on-dark', onDark);
       const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       progress.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
     };
-    window.addEventListener('scroll', () => {
+    const queue = () => {
       if (!scrollQueued) {
         scrollQueued = true;
         requestAnimationFrame(onScrollFrame);
       }
-    }, { passive: true });
+    };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
     onScrollFrame();
   }
 

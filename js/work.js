@@ -85,8 +85,44 @@
         grid.querySelectorAll('.work-card').forEach(function (c) {
           c.hidden = f !== 'all' && c.dataset.group !== f;
         });
+        grid.scrollTo({ left: 0, behavior: 'instant' });
+        updateRail();
       });
     });
+
+    // Sideways row: arrow buttons move one screen of cards; a gold line shows where you are.
+    var arrows = document.querySelector('[data-work-arrows]');
+    var prev = document.querySelector('[data-work-prev]');
+    var next = document.querySelector('[data-work-next]');
+    var fill = document.querySelector('[data-work-track]');
+    var queued = false;
+    function updateRail() {
+      queued = false;
+      var max = grid.scrollWidth - grid.clientWidth;
+      var canScroll = max > 4;
+      if (arrows) arrows.hidden = !canScroll;
+      if (prev) prev.disabled = grid.scrollLeft <= 4;
+      if (next) next.disabled = grid.scrollLeft >= max - 4;
+      if (fill) {
+        var shown = grid.clientWidth / Math.max(grid.scrollWidth, 1);
+        var at = canScroll ? grid.scrollLeft / max : 0;
+        fill.style.transform = 'translateX(' + (at * (1 - shown) * 100).toFixed(2) + '%) scaleX(' + Math.min(1, shown).toFixed(3) + ')';
+      }
+    }
+    function step(dir) {
+      var card = grid.querySelector('.work-card:not([hidden])');
+      var gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+      var per = card ? card.getBoundingClientRect().width + gap : grid.clientWidth;
+      var visible = Math.max(1, Math.floor((grid.clientWidth + gap) / per));
+      grid.scrollBy({ left: dir * per * visible, behavior: 'smooth' });
+    }
+    if (prev) prev.addEventListener('click', function () { step(-1); });
+    if (next) next.addEventListener('click', function () { step(1); });
+    grid.addEventListener('scroll', function () {
+      if (!queued) { queued = true; window.requestAnimationFrame(updateRail); }
+    }, { passive: true });
+    window.addEventListener('resize', updateRail);
+    updateRail();
   }
 
   var videos = (window.AGI_VIDEOS || []).filter(function (v) { return v && v.src; });

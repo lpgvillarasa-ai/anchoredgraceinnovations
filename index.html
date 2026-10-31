@@ -134,7 +134,7 @@
 
     <!-- ============ FILM: a short film that plays as you scroll (js/film.js).
          Hidden until /film/manifest.json exists, so the page never shows an empty frame. ============ -->
-    <section class="film" id="film" aria-label="Anchored, built, staffed" data-film hidden>
+    <section class="film" id="film" aria-label="Anchored, built, staffed" data-film data-nav-dark hidden>
       <div class="film-stage">
         <canvas class="film-canvas" aria-hidden="true"></canvas>
         <div class="film-shade" aria-hidden="true"></div>
@@ -283,13 +283,21 @@
           </div>
           <p class="section-aside">Live sites open in a new tab. Private systems hold real people's data, so we describe them and never open them.</p>
         </div>
-        <div class="work-filters" role="group" aria-label="Filter projects" data-reveal>
-          <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All</button>
-          <button type="button" class="chip" data-filter="live" aria-pressed="false">Client websites</button>
-          <button type="button" class="chip" data-filter="product" aria-pressed="false">Our products</button>
-          <button type="button" class="chip" data-filter="system" aria-pressed="false">Business systems</button>
+        <div class="work-bar" data-reveal>
+          <div class="work-filters" role="group" aria-label="Filter projects">
+            <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-filter="live" aria-pressed="false">Client websites</button>
+            <button type="button" class="chip" data-filter="product" aria-pressed="false">Our products</button>
+            <button type="button" class="chip" data-filter="system" aria-pressed="false">Business systems</button>
+          </div>
+          <div class="work-arrows" data-work-arrows hidden>
+            <button type="button" class="work-arrow" data-work-prev aria-label="Previous projects"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button type="button" class="work-arrow" data-work-next aria-label="Next projects"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
         </div>
-        <div class="work-grid" data-work-grid></div>
+        <!-- A sideways row of project cards: swipe on phones, arrows or trackpad on computers. -->
+        <div class="work-grid" data-work-grid tabindex="-1"></div>
+        <div class="work-track" aria-hidden="true"><span class="work-track-fill" data-work-track></span></div>
         <noscript><p class="work-noscript">Turn on JavaScript to see our projects, or book a call and we will walk you through them.</p></noscript>
       </div>
     </section>
@@ -306,7 +314,7 @@
     </section>
 
     <!-- ============ AI-NATIVE TALENT ============ -->
-    <section id="talent" class="ai-band">
+    <section id="talent" class="ai-band" data-nav-dark>
       <div class="ai-glow" aria-hidden="true"></div>
       <div class="ai-grid container">
         <div data-reveal>
@@ -374,7 +382,7 @@
     </section>
 
     <!-- ============ CONTACT / CTA ============ -->
-    <section id="contact" class="contact">
+    <section id="contact" class="contact" data-nav-dark>
       <div class="contact-dots" aria-hidden="true"></div>
       <div class="contact-glow" aria-hidden="true"></div>
       <div class="contact-inner" data-reveal>
@@ -392,7 +400,7 @@
   </main>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="footer">
+  <footer class="footer" data-nav-dark>
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
