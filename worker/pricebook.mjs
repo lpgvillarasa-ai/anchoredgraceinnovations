@@ -5,7 +5,7 @@
 // php / usd: [low, high]. A missing currency means "not offered in that market".
 // billing: 'once' (one-time project), 'month' (every month), 'each' (per unit).
 
-export const PRICE_BOOK_VERSION = '2026-10-31 draft 3 (approved)';
+export const PRICE_BOOK_VERSION = '2026-10-31 draft 4 (approved)';
 
 export const ITEMS = {
   // ----- Build -----
@@ -34,13 +34,15 @@ export const ITEMS = {
   ai_training_half_day: { group: 'Automate', label: 'AI staff training, half day', billing: 'once', php: [30000, 60000], usd: [1500, 3000] },
   ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', php: [60000, 120000], usd: [3000, 6000] },
 
-  // ----- Staff (businesses outside the Philippines, full time, from $1,199; priced in steps by role, Lee 2026-10-31) -----
-  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1399, 1899], abroadOnly: true },
-  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [1799, 2399], abroadOnly: true },
-  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1499, 2099], abroadOnly: true },
-  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1299, 1699], abroadOnly: true },
-  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1199, 1499], abroadOnly: true },
-  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1299, 1799], abroadOnly: true },
+  // ----- Staff (full time, priced in steps by role, Lee 2026-10-31) -----
+  // Overseas: from $1,199, working the client's hours. Philippines: from ₱35,000,
+  // Philippine daytime hours, the same ladder scaled to pesos.
+  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', php: [41000, 55500], usd: [1399, 1899] },
+  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', php: [52500, 70000], usd: [1799, 2399] },
+  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', php: [44000, 61500], usd: [1499, 2099] },
+  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', php: [38000, 49500], usd: [1299, 1699] },
+  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', php: [35000, 44000], usd: [1199, 1499] },
+  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', php: [38000, 52500], usd: [1299, 1799] },
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', php: [1500, 4000], usd: [60, 150] },
@@ -91,10 +93,6 @@ export function estimate({ client_region, items }) {
     if (!item) { problems.push(`Unknown item "${id}".`); continue; }
     if (seen.has(id)) continue;
     seen.add(id);
-    if (item.abroadOnly && client_region === 'philippines') {
-      problems.push(`"${item.label}" is offered to businesses outside the Philippines only. Do not quote staffing to this client; say so and offer to help with the rest.`);
-      continue;
-    }
     if (id === 'system_care') { wantsSystemCare = true; continue; }
     const range = item[key];
     if (!range) { problems.push(`"${item.label}" is not offered in ${currency}.`); continue; }
@@ -140,7 +138,7 @@ export function estimate({ client_region, items }) {
 export function catalogText() {
   const groups = {};
   for (const [id, it] of Object.entries(ITEMS)) {
-    (groups[it.group] ||= []).push(`- ${id}: ${it.label}${it.billing === 'month' ? ' [monthly]' : it.billing === 'each' ? ' [per video, use quantity]' : ''}${it.abroadOnly ? ' [businesses outside the Philippines only]' : ''}`);
+    (groups[it.group] ||= []).push(`- ${id}: ${it.label}${it.billing === 'month' ? ' [monthly]' : it.billing === 'each' ? ' [per video, use quantity]' : ''}`);
   }
   return Object.entries(groups).map(([g, lines]) => `${g}:\n${lines.join('\n')}`).join('\n\n');
 }

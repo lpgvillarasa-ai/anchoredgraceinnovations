@@ -1271,3 +1271,6 @@ html.work-dialog-open { overflow: hidden; }
 .contact-email { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(216, 195, 155, 0.45); }
 .contact-email:hover { text-decoration-color: var(--gold); }
 .contact-email:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
+
+/* Second price list on the staffing card: peso prices for businesses in the Philippines */
+.role-prices-title { margin: 6px 0 0; font-size: 14px; color: rgba(244, 241, 235, 0.72); }

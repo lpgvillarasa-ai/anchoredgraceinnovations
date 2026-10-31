@@ -107,7 +107,7 @@ function amounts(text) {
   return found;
 }
 export function allowedAmounts(messages) {
-  const allowed = new Set([1199]);
+  const allowed = new Set([1199, 35000]);
   for (const m of messages) {
     if (m.role !== 'user' || !Array.isArray(m.content)) continue;
     for (const b of m.content) {
