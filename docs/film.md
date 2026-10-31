@@ -13,8 +13,10 @@ They are in Cloudflare R2, bucket `agi-website-media`, folder `film/`. They are 
 | Path | What |
 |---|---|
 | `film/manifest.json` | The list the player reads. If it says `"sets": null`, or is missing, the film stays hidden. |
-| `film/v1/wide/0001.webp` to `0120.webp` | Tablets and computers: 1600x900, about 4.0 MB in all |
-| `film/v1/tall/0001.webp` to `0060.webp` | Phones: 720x1280, about 1.8 MB. The crop pans right with the subject. |
+| `film/v2/hd/0001.webp` to `0121.webp` | Large or high-resolution screens: 2560x1440, about 14 MB in all |
+| `film/v2/wide/0001.webp` to `0121.webp` | Other tablets and computers, and anyone with data saver on: 1920x1080, about 9.4 MB |
+| `film/v2/tall/0001.webp` to `0061.webp` | Phones: 1080x1920, about 5 MB. The crop pans right with the subject. |
+| `film/v1/...` | The first, softer version (1600x900). Kept, unused. |
 
 Picture folders are versioned and cached for a year. **To change the film, upload a new folder (`film/v2/...`), then point `manifest.json` at it.** Never overwrite the pictures inside an existing folder: visitors' browsers would keep the old ones.
 
@@ -24,7 +26,11 @@ To hide the film again without deleting anything, set `manifest.json` to:
 {"ready": false, "sets": null}
 ```
 
-## How v1 was made (31 Oct 2026, about 168 Higgsfield credits)
+## How it was made (31 Oct 2026)
+
+v1 used about 168 Higgsfield credits. Lee found it soft and blocky on big screens. v2 is the same footage, sharpened to 4K with Bytedance Video Upscale (standard, AI-content preset, 4 credits per clip). Its frames were taken at 2560 and 1920 pixels wide and compressed more gently (WebP quality 84, or 80 on phones), so dark areas no longer band.
+
+### v1
 
 1. **Three stills** with GPT Image 2.5: 16:9, 2k, quality high. Stills B and C used still A as a style reference.
    - **A, Anchored:** a monumental brushed champagne-gold anchor standing in still black water at blue hour. A small four-pointed star of gold light glows above its ring. Low mist. The left third is dark, empty space for the words.
@@ -34,3 +40,12 @@ To hide the film again without deleting anything, set `manifest.json` to:
 3. **Frames.** The two clips were joined (the second clip's first frame dropped, as it repeats the first clip's last), giving 241 frames. Sampled evenly to 120 wide frames (WebP quality 62) and 60 phone frames, a 9:16 crop whose centre moves from 62% to 76% of the width (WebP quality 58).
 
 Size budget: under 6 MB on computers and 3 MB on phones. The player loads only after the rest of the page has finished loading, and only when the visitor is near the film.
+
+## Marketing video samples
+
+The "Marketing videos" section under the work gallery shows four reels Lee made for Seikomods Premium, shown with their brand at Lee's OK (31 Oct 2026). The list is `AGI_VIDEOS` in `js/projects.js`.
+
+- **Where they live:** R2 folder `reels/v1/`, served by `worker/film.mjs`. It supports the partial requests iPhones need for video.
+- **The files:** 720x1280 H.264 with a cover still each, 2 to 3 MB apiece.
+- **How they play:** each plays silently on a loop while it is mostly on screen, and pauses when it leaves. "Tap for sound" turns sound on for one video at a time.
+- **Motion turned off:** nothing plays by itself; the normal controls show instead.

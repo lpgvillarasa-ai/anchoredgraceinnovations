@@ -43,3 +43,26 @@ test('only GET and HEAD, and a missing storage link is a plain 404', async () =>
   assert.equal((await get('/film/manifest.json', { MEDIA: fakeBucket([]) }, { method: 'POST' })).status, 405);
   assert.equal((await get('/film/manifest.json', {})).status, 404);
 });
+
+test('marketing videos are served from reels/, including partial requests for phones', async () => {
+  const bytes = 'x'.repeat(1000);
+  const bucket = {
+    get: async (key, opts) => {
+      if (key !== 'reels/v1/reveal.mp4') return null;
+      if (opts && opts.range) return { body: bytes.slice(0, 100), httpEtag: '"v1"', size: 1000, range: { offset: 0, length: 100 } };
+      return { body: bytes, httpEtag: '"v1"', size: 1000 };
+    },
+  };
+  const env = { MEDIA: bucket };
+  const full = await get('/reels/v1/reveal.mp4', env);
+  assert.equal(full.status, 200);
+  assert.equal(full.headers.get('content-type'), 'video/mp4');
+  assert.equal(full.headers.get('accept-ranges'), 'bytes');
+  const part = await get('/reels/v1/reveal.mp4', env, { headers: { range: 'bytes=0-99' } });
+  assert.equal(part.status, 206);
+  assert.equal(part.headers.get('content-range'), 'bytes 0-99/1000');
+  assert.equal(part.headers.get('content-length'), '100');
+  for (const p of ['/reels/../film/manifest.json', '/reels/v1/x.html', '/videos/v1/reveal.mp4']) {
+    assert.equal((await get(p, env)).status, 404, p);
+  }
+});

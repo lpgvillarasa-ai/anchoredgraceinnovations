@@ -34,10 +34,14 @@
   }
 
   function pickSet(m) {
-    // Phones get the smaller upright set; tablets and computers get the sharper wide set.
+    // Phones get the upright set. Large or high-resolution screens get the extra-sharp
+    // set (hd), unless the visitor has turned on data saver; everything else the wide set.
     var tall = window.innerWidth <= 720 && window.innerWidth / window.innerHeight < 0.9;
-    var choice = tall && validSet(m.sets.tall) ? m.sets.tall : m.sets.wide;
-    return validSet(choice) ? choice : null;
+    if (tall && validSet(m.sets.tall)) return m.sets.tall;
+    var saveData = navigator.connection && navigator.connection.saveData;
+    var screenPx = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+    if (!saveData && screenPx > 2000 && validSet(m.sets.hd)) return m.sets.hd;
+    return validSet(m.sets.wide) ? m.sets.wide : null;
   }
 
   // ---------- Drawing ----------

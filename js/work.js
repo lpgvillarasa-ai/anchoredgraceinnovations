@@ -125,20 +125,50 @@
     updateRail();
   }
 
-  var videos = (window.AGI_VIDEOS || []).filter(function (v) { return v && v.src; });
+  // Marketing videos: each plays silently, on a loop, while it is on screen, and
+  // pauses when it leaves (so only what you can see uses data). "Tap for sound"
+  // turns sound on for that video only. With motion turned off, nothing plays by
+  // itself: the normal controls appear instead.
+  var videos = (window.AGI_VIDEOS || []).filter(function (v) { return v && /^\/reels\/[\w\/.-]+\.mp4$/.test(v.src); });
   var vSection = document.querySelector('[data-videos]');
   var vGrid = document.querySelector('[data-video-grid]');
+  var stillOnly = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (vSection && vGrid && videos.length) {
+    var players = [];
     videos.forEach(function (v) {
       var f = el('figure', 'video-card');
+      var frame = el('div', 'video-frame');
       var vid = el('video');
-      vid.src = v.src;
-      if (v.poster) vid.poster = v.poster;
-      vid.controls = true;
-      vid.preload = 'none';
+      if (v.poster && /^\/reels\/[\w\/.-]+\.jpg$/.test(v.poster)) vid.poster = v.poster;
+      vid.muted = true;
+      vid.defaultMuted = true;
+      vid.loop = true;
       vid.playsInline = true;
+      vid.setAttribute('playsinline', '');
+      vid.preload = 'none';
       vid.setAttribute('controlsList', 'nodownload');
-      f.appendChild(vid);
+      vid.setAttribute('aria-label', (v.title || 'Video') + ', ' + (v.note || ''));
+      vid.dataset.src = v.src;
+      frame.appendChild(vid);
+      if (stillOnly) {
+        vid.controls = true;
+        vid.src = v.src;
+      } else {
+        var sound = el('button', 'video-sound', 'Tap for sound');
+        sound.type = 'button';
+        sound.setAttribute('aria-pressed', 'false');
+        sound.addEventListener('click', function () {
+          var on = vid.muted;
+          players.forEach(function (p) { p.vid.muted = true; p.sound.textContent = 'Tap for sound'; p.sound.setAttribute('aria-pressed', 'false'); });
+          vid.muted = !on;
+          sound.textContent = on ? 'Sound on' : 'Tap for sound';
+          sound.setAttribute('aria-pressed', String(on));
+          if (on) vid.play().catch(function () {});
+        });
+        frame.appendChild(sound);
+        players.push({ vid: vid, sound: sound });
+      }
+      f.appendChild(frame);
       var cap = el('figcaption');
       cap.appendChild(el('strong', null, v.title || ''));
       if (v.note) cap.appendChild(el('span', null, v.note));
@@ -146,5 +176,19 @@
       vGrid.appendChild(f);
     });
     vSection.hidden = false;
+    if (!stillOnly && 'IntersectionObserver' in window) {
+      var vio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var vid = e.target;
+          if (e.isIntersecting) {
+            if (!vid.src) { vid.src = vid.dataset.src; vid.preload = 'auto'; }
+            vid.play().catch(function () {});
+          } else if (vid.src) {
+            vid.pause();
+          }
+        });
+      }, { threshold: 0.5 });
+      players.forEach(function (p) { vio.observe(p.vid); });
+    }
   }
 })();
