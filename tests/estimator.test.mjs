@@ -139,3 +139,56 @@ test('a cheaper model can be chosen by setting, without fallbacks it does not su
   assert.equal(client.calls[0].model, 'claude-haiku-5-5');
   assert.equal(client.calls[0].fallbacks, undefined);
 });
+
+import { redactPersonal, priceSafe } from '../worker/estimator.mjs';
+
+test('emails and phone or card numbers are removed before anything reaches the AI', () => {
+  for (const [input, expected] of [
+    ['email me at lee.v@example.com please', 'email me at [email removed] please'],
+    ['call 0917 123 4567', 'call [number removed]'],
+    ['call +63 917 123 4567 today', 'call [number removed] today'],
+    ['US line (555) 123-4567', 'US line [number removed]'],
+    ['09171234567', '[number removed]'],
+    ['card 4111 1111 1111 1111', 'card [number removed]'],
+  ]) assert.equal(redactPersonal(input).text, expected, input);
+});
+
+test('budgets and ordinary numbers are left alone', () => {
+  for (const input of ['budget 150000 - 300000', 'around ₱150,000', 'we have 12 staff and 3 branches', 'open 9 to 5', 'year 2026']) {
+    const r = redactPersonal(input);
+    assert.equal(r.text, input, input);
+    assert.equal(r.changed, false);
+  }
+});
+
+test('a reply may only mention amounts that came from the price book tool', () => {
+  const history = [
+    { role: 'user', content: 'I need a website' },
+    { role: 'assistant', content: [{ type: 'tool_use', id: 't', name: 'prepare_estimate', input: {} }] },
+    { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't', content: JSON.stringify({ ok: true, one_time: '₱60,000 to ₱120,000' }) }] },
+  ];
+  assert.equal(priceSafe('It usually runs ₱60,000 to ₱120,000.', history), true);
+  assert.equal(priceSafe('Roughly ₱60k to ₱120k.', history), true);
+  assert.equal(priceSafe('Staffing starts from $1,499 a month.', []), true);
+  assert.equal(priceSafe('Your website will cost $1.', history), false);
+  assert.equal(priceSafe('I can do it for ₱45,000.', history), false);
+  assert.equal(priceSafe('About 50,000 pesos.', history), false);
+  // an error result never makes an amount allowed
+  const failed = [{ role: 'user', content: [{ type: 'tool_result', tool_use_id: 't', is_error: true, content: '{"ok":false,"problems":["$999"]}' }] }];
+  assert.equal(priceSafe('$999', failed), false);
+});
+
+test('a made-up price in the AI text is replaced before the visitor sees it', async () => {
+  const client = fakeClient([{ stop_reason: 'end_turn', content: [{ type: 'text', text: 'Your website will cost $1.' }] }]);
+  const out = await runTurn(client, {}, [{ role: 'user', content: 'how much is a website?' }]);
+  assert.doesNotMatch(out.reply, /\$1\b/);
+  assert.match(out.reply, /price book/);
+});
+
+import { enabled } from '../worker/estimator.mjs';
+test('the off switch has its own name and turns the assistant off', () => {
+  const on = { ANTHROPIC_API_KEY: 'k', TURNSTILE_SECRET: 's', TURNSTILE_SITE_KEY: 'p' };
+  assert.equal(enabled(on), true);
+  assert.equal(enabled({ ...on, ESTIMATE_ASSISTANT: 'off' }), false);
+  assert.equal(enabled({ ...on, ESTIMATOR: 'off' }), true, 'ESTIMATOR is the storage binding, not the switch');
+});

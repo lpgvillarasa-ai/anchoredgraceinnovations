@@ -72,7 +72,7 @@
   form.appendChild(input);
   form.appendChild(mic);
   form.appendChild(sendBtn);
-  var foot = el('p', 'est-foot', 'Estimates are a guide. Your final price is confirmed on a free discovery call.');
+  var foot = el('p', 'est-foot', 'Estimates are a guide; your final price is confirmed on a free call. Chats are answered by AI, so please keep personal details for the form.');
 
   panel.appendChild(head);
   panel.appendChild(log);
@@ -224,6 +224,7 @@
       if (!ok) { thinking.remove(); setBusy(false); return; }
       return post('/api/estimate/message', { sessionId: state.sessionId, text: text }).then(function (r) {
         thinking.remove();
+        if (r.redacted) note('For your privacy, contact details were removed from your message. Use the form under your estimate to send them to Lee.');
         if (r.reply) bubble('ai', r.reply);
         if (r.estimate && r.estimate.ok) { state.lastEstimate = r.estimate; estimateCard(r.estimate); }
         if (!r.reply && r.error) note(r.error);

@@ -34,11 +34,12 @@ const SORRY = {
   slow_down: 'Please wait a moment before sending another message.',
   no_session: 'This chat has ended. Please start a new one.',
   expired: 'This chat timed out. Please start a new one.',
+  one_at_a_time: 'Please wait for the answer to your last message.',
   ai_down: 'Sorry, the assistant could not answer just now. Please try again in a minute, or book a free call.',
 };
 
 export function enabled(env) {
-  return Boolean(env.ANTHROPIC_API_KEY && env.TURNSTILE_SECRET && env.TURNSTILE_SITE_KEY && env.ESTIMATOR !== 'off');
+  return Boolean(env.ANTHROPIC_API_KEY && env.TURNSTILE_SECRET && env.TURNSTILE_SITE_KEY && env.ESTIMATE_ASSISTANT !== 'off');
 }
 
 async function ipHashOf(request, env) {
@@ -69,6 +70,54 @@ export async function verifyTurnstile(token, request, env) {
   const res = await fetch(env.TURNSTILE_VERIFY_URL || 'https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
   const out = await res.json().catch(() => ({}));
   return out.success === true;
+}
+
+// Personal details never reach the AI provider: emails and phone numbers are
+// removed on the server before a message is stored or sent. Contact details
+// belong in the enquiry form, which never goes to the AI.
+const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
+// Phone or card numbers: 10+ digits written in one run or in small groups
+// ("0917 123 4567", "+1 (555) 123-4567"). Prices like "150000 - 300000" or "₱150,000" are left alone.
+const GROUPED_RE = /(?<![\d,])\+?\(?\d{1,4}\)?(?:[\s.-]\(?\d{2,4}\)?){2,5}(?![\d,])/g;
+const RUN_RE = /(?<![\d,])\+?\d{10,19}(?![\d,])/g;
+const digitCount = (s) => (s.match(/\d/g) || []).length;
+export function redactPersonal(text) {
+  const out = text
+    .replace(EMAIL_RE, '[email removed]')
+    .replace(GROUPED_RE, (m) => (digitCount(m) >= 10 ? '[number removed]' : m))
+    .replace(RUN_RE, '[number removed]');
+  return { text: out, changed: out !== text };
+}
+
+// Every amount of money in a reply must come from the price book tool's results
+// in this chat (or the public "from $1,499" staffing price). Anything else is
+// never shown to the visitor.
+const MONEY_RE = /(?:₱|PHP\s?|USD\s?|\$|P(?=\d))\s?(\d[\d,]*(?:\.\d+)?)\s?(k|K)?|(\d[\d,]*(?:\.\d+)?)\s?(k|K)?\s?(?:pesos?|php|usd|dollars?)\b/gi;
+function amounts(text) {
+  const found = [];
+  for (const m of String(text).matchAll(MONEY_RE)) {
+    const raw = m[1] || m[3];
+    let n = Number(raw.replace(/,/g, ''));
+    if (m[2] || m[4]) n *= 1000;
+    if (Number.isFinite(n)) found.push(Math.round(n));
+  }
+  return found;
+}
+export function allowedAmounts(messages) {
+  const allowed = new Set([1499]);
+  for (const m of messages) {
+    if (m.role !== 'user' || !Array.isArray(m.content)) continue;
+    for (const b of m.content) {
+      if (b.type === 'tool_result' && !b.is_error && typeof b.content === 'string') {
+        for (const n of b.content.match(/\d[\d,]*/g) || []) allowed.add(Number(n.replace(/,/g, '')));
+      }
+    }
+  }
+  return allowed;
+}
+export function priceSafe(reply, messages) {
+  const allowed = allowedAmounts(messages);
+  return amounts(reply).every((n) => allowed.has(n));
 }
 
 export function makeClient(env) {
@@ -106,7 +155,13 @@ export async function runTurn(client, env, history) {
 
     if (response.stop_reason === 'pause_turn') continue;
     if (response.stop_reason !== 'tool_use') {
-      return { reply: textOf(response.content), added, estimate: lastEstimate, summary };
+      let reply = textOf(response.content);
+      if (!priceSafe(reply, [...history, ...added])) {
+        reply = lastEstimate
+          ? 'Your estimate is in the card below, straight from our price book. Lee confirms the final price on a free discovery call.'
+          : 'I can only quote prices from our price book. Tell me a little more about what you need and I will work out an estimate.';
+      }
+      return { reply, added, estimate: lastEstimate, summary };
     }
     const results = [];
     for (const block of response.content) {
@@ -200,24 +255,25 @@ export async function handleEstimator(request, env, deps = {}) {
     const text = cleanText(body.text, limits.maxChars + 1);
     if (!sessionId || !text) return json({ error: 'Type a message first.' }, 400);
     if (text.length > limits.maxChars) return json({ error: `Please keep messages under ${limits.maxChars} characters.` }, 400);
-    const turn = await store.beginTurn({ sessionId, ipHash, text, limits });
-    if (!turn.ok) return json({ error: SORRY[turn.reason] || SORRY.busy, reason: turn.reason }, turn.reason === 'slow_down' ? 429 : 409);
+    const clean = redactPersonal(text);
+    const turn = await store.beginTurn({ sessionId, ipHash, text: clean.text, limits });
+    if (!turn.ok) return json({ error: SORRY[turn.reason] || SORRY.busy, reason: turn.reason }, ['slow_down', 'one_at_a_time'].includes(turn.reason) ? 429 : 409);
     let result;
     try {
       result = await runTurn(client, env, turn.history);
     } catch (err) {
-      await store.undoTurn(sessionId);
+      await store.undoTurn(sessionId, turn.seq);
       const status = err instanceof Anthropic.APIError ? err.status : 'network';
       console.log(`estimator: AI call failed (${status})`); // status only, never the visitor's text
       return json({ error: SORRY.ai_down, reason: 'ai_down' }, 503);
     }
     if (result.refused) {
-      await store.undoTurn(sessionId);
+      await store.undoTurn(sessionId, turn.seq);
       return json({ reply: 'I can only help with Anchored Grace services and estimates. What would you like to build?', turnsLeft: turn.turnsLeft + 1 });
     }
-    await store.append(sessionId, result.added);
+    await store.finishTurn(sessionId, turn.seq, result.added);
     if (result.estimate) await store.setEstimate(sessionId, result.estimate, result.summary);
-    return json({ reply: result.reply, estimate: result.estimate, turnsLeft: turn.turnsLeft });
+    return json({ reply: result.reply, estimate: result.estimate, turnsLeft: turn.turnsLeft, redacted: clean.changed });
   }
 
   if (url.pathname === '/api/estimate/lead') {

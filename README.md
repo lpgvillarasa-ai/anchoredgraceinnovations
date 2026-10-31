@@ -91,13 +91,18 @@ range. How it stays safe and cheap:
   variables (`ESTIMATOR_SESSIONS_PER_DAY` and friends, see `worker/estimator.mjs`).
 - **Cost control:** the instructions and price book are cached by the AI provider, effort is
   set low for chat, and Lee sets a hard monthly spending cap on the Anthropic account.
-- **Privacy:** visitors' IP addresses are never stored, only a salted fingerprint. Names and
-  emails are kept only when a visitor fills in the form and ticks consent.
+- **Privacy:** visitors' IP addresses are never stored, only a salted fingerprint. Emails and
+  phone numbers typed into the chat are removed on the server before anything is stored or
+  sent to the AI. Names and emails are kept only from the form, with consent, and the form
+  never goes to the AI.
+- **Price guard:** every amount in a reply is checked against the price book results in that
+  chat; a reply with any other amount is never shown.
+- **One message at a time** per chat, so a double-tap cannot mix up the conversation.
 - **Enquiries:** visitors who leave their details appear at `/admin/leads` (password in the
   `ADMIN_PASSWORD` secret). The "Book a free call" link opens Calendly pre-filled with their
   name, email and estimate.
 - The window only appears when `ANTHROPIC_API_KEY`, `TURNSTILE_SITE_KEY` and
-  `TURNSTILE_SECRET` are set. Set `ESTIMATOR=off` to hide it instantly.
+  `TURNSTILE_SECRET` are set. Set the variable `ESTIMATE_ASSISTANT` to `off` to hide it instantly.
 
 Code: `worker/` (server), `js/estimator.js` (chat window), `tests/` (`npm test`).
 

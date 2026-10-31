@@ -88,6 +88,11 @@ window.AGI_PROJECTS = [
     tags: ['CRM', 'Sales'], img: 'media/work/agency-pipeline.jpg', show: true,
   },
   {
+    name: 'AGIbnb', group: 'product', kind: 'Try it live',
+    line: 'A stays and booking platform with an operations app and an owner portal. A full demo: everything stays in your browser.',
+    tags: ['Booking', 'Payments flow', 'Owner portal'], url: 'https://agibnb.anchoredgraceinnovation.com', img: 'media/work/agibnb.jpg', show: true,
+  },
+  {
     name: 'Restaurant POS: live demo', group: 'product', kind: 'Try it live',
     line: 'Sign in as Demo Admin with PIN 111111. Sample data only; nothing you enter leaves your browser.',
     tags: ['POS', 'Demo'], url: 'https://posdemo.anchoredgraceinnovation.com', img: 'media/work/concept-posdemo.jpg', show: true,
