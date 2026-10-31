@@ -10,10 +10,10 @@ export default function Staffing({ f }: { f: Fragments }) {
     <>
       <PageHead
         title="AI-Native Admin Staff for Growing Businesses | Anchored Grace Innovations"
-        description="A dedicated, full-time AI-native assistant for your small business, wherever you are: inbox, calendar, customer support, bookkeeping and data. Works your hours. From $1,199 a month, or ₱35,000 in the Philippines."
+        description="A dedicated, full-time AI-native assistant for your small business, wherever you are: inbox, calendar, customer support, bookkeeping and data. Works your hours. From $1,499 a month."
         path="/staffing"
         ogTitle="AI-native admin staff for growing businesses"
-        ogDescription="A dedicated, full-time assistant trained on AI and supervised by us. Works your hours. From $1,199 a month, or ₱35,000 in the Philippines."
+        ogDescription="A dedicated, full-time assistant trained on AI and supervised by us. Works your hours. From $1,499 a month."
       />
       <Legacy html={f.sprite} />
       <Legacy html={f.header} />

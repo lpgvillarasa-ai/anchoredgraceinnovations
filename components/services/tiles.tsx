@@ -207,8 +207,8 @@ export function StaffingTile({ className }: { className?: string }) {
         ))}
       </ol>
       <div className="tw:mt-auto tw:pt-6">
-        <p className="tw:m-0 tw:text-[20px] tw:font-semibold tw:tracking-[-0.01em] tw:text-ink">From $1,199 / month</p>
-        <p className="tw:m-0 tw:text-[13.5px] tw:text-[#5b5f66]">or ₱35,000 for businesses in the Philippines</p>
+        <p className="tw:m-0 tw:text-[20px] tw:font-semibold tw:tracking-[-0.01em] tw:text-ink">From $1,499 / month</p>
+        <p className="tw:m-0 tw:text-[13.5px] tw:text-[#5b5f66]">In the Philippines, the price is confirmed on a call</p>
         <a href="/staffing" className="tw:mt-3 tw:inline-flex tw:min-h-11 tw:items-center tw:gap-1.5 tw:font-semibold tw:text-ink tw:underline tw:decoration-gold-ink tw:underline-offset-4 tw:hover:decoration-2">
           See staffing <span aria-hidden="true">→</span>
         </a>
