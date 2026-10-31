@@ -972,9 +972,18 @@ a.work-card:hover { transform: translateY(-6px); border-color: rgba(216, 195, 15
 .work-noscript { color: #5b625b; }
 
 /* ============ Videos ============ */
-.video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-.video-card { margin: 0; background: var(--ink); border-radius: 16px; overflow: hidden; }
+.video-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.video-card { margin: 0; background: var(--ink); border-radius: 16px; overflow: hidden; box-shadow: 0 30px 60px -36px rgba(11, 14, 19, 0.6); }
+.video-frame { position: relative; }
 .video-card video { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: #000; }
+.video-sound {
+  position: absolute; right: 12px; bottom: 12px; min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 600 12.5px/1 var(--font-body); color: var(--cream-text);
+  background: rgba(11, 14, 19, 0.62); border: 1px solid rgba(216, 195, 155, 0.35);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.video-sound[aria-pressed="true"] { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.video-sound:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .video-card figcaption { display: grid; gap: 3px; padding: 14px 18px 18px; color: var(--cream-text); font-size: 14px; }
 .video-card figcaption span { color: #8e939b; font-size: 13px; }
 
@@ -983,7 +992,15 @@ a.work-card:hover { transform: translateY(-6px); border-color: rgba(216, 195, 15
   .work-grid { grid-auto-columns: calc((100% - 22px) / 2.2); }
 }
 @media (max-width: 700px) {
-  .pillars.pillars-3, .video-grid { grid-template-columns: 1fr; }
+  .pillars.pillars-3 { grid-template-columns: 1fr; }
+  /* Phones: the videos sit in a sideways row instead of a long column. */
+  .video-grid {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; gap: 14px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-right: calc((100vw - 100%) / -2); padding-right: calc((100vw - 100%) / 2); padding-bottom: 8px;
+  }
+  .video-grid::-webkit-scrollbar { display: none; }
+  .video-card { scroll-snap-align: start; }
   .work-grid { grid-auto-columns: 84%; gap: 14px; }
   .work-arrows { display: none; }
   .addon { flex-direction: column; align-items: flex-start; padding: 22px; }

@@ -138,7 +138,12 @@ window.AGI_PROJECTS = [
 ];
 
 /* Videos for the "Marketing videos" section. The section stays hidden until
-   at least one entry is here. src: a file in /media (mp4), poster: a still. */
+   at least one entry is here. The files live in our own storage, folder reels/
+   (see worker/film.mjs): src is the video, poster the still shown before it plays.
+   Made by Lee for Seikomods Premium, shown with their brand (Lee, 31 Oct 2026). */
 window.AGI_VIDEOS = [
-  // { title: 'Product launch reel', note: 'Made from one product photo', src: 'media/reel-1.mp4', poster: 'media/reel-1.jpg' },
+  { title: 'Studio reveal', note: 'Seikomods Premium · product film', src: '/reels/v1/reveal.mp4', poster: '/reels/v1/reveal.jpg' },
+  { title: 'Chronograph close-up', note: 'Seikomods Premium · social reel', src: '/reels/v1/chronograph.mp4', poster: '/reels/v1/chronograph.jpg' },
+  { title: 'Golden hour drive', note: 'Seikomods Premium · social reel', src: '/reels/v1/golden-hour.mp4', poster: '/reels/v1/golden-hour.jpg' },
+  { title: 'Unboxing', note: 'Seikomods Premium · customer-style reel', src: '/reels/v1/unboxing.mp4', poster: '/reels/v1/unboxing.jpg' },
 ];
