@@ -10,7 +10,7 @@
     'I want to add AI to my business',
     'I need admin staff for my US business',
   ];
-  var state = { config: null, sessionId: null, starting: null, busy: false, lastEstimate: null, listening: false };
+  var state = { config: null, sessionId: null, starting: null, busy: false, lastEstimate: null, listening: false, agreed: false };
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -48,6 +48,13 @@
   var log = el('div', 'est-log');
   log.setAttribute('aria-live', 'polite');
   var human = el('div', 'est-human');
+  // The visitor taps OK on the AI notice before they can chat (the server checks it too).
+  var agree = el('div', 'est-agree');
+  var agreeText = el('p', 'est-agree-text');
+  var agreeBtn = el('button', 'est-btn est-btn-gold', 'OK, start chatting');
+  agreeBtn.type = 'button';
+  agree.appendChild(agreeText);
+  agree.appendChild(agreeBtn);
   var starters = el('div', 'est-starters');
   STARTERS.forEach(function (t) {
     var b = el('button', 'est-chip', t);
@@ -72,11 +79,12 @@
   form.appendChild(input);
   form.appendChild(mic);
   form.appendChild(sendBtn);
-  var foot = el('p', 'est-foot', 'Estimates are a guide; your final price is confirmed on a free call. Chats are answered by AI, so please keep personal details for the form.');
+  var foot = el('p', 'est-foot', 'Estimates are a guide; your final price is confirmed on a free call.');
 
   panel.appendChild(head);
   panel.appendChild(log);
   panel.appendChild(human);
+  panel.appendChild(agree);
   panel.appendChild(starters);
   panel.appendChild(form);
   panel.appendChild(foot);
@@ -182,7 +190,7 @@
           sitekey: state.config.siteKey,
           appearance: 'interaction-only',
           callback: function (token) {
-            post('/api/estimate/start', { token: token }).then(function (r) {
+            post('/api/estimate/start', { token: token, aiNotice: state.agreed }).then(function (r) {
               human.hidden = true;
               human.replaceChildren();
               if (r.sessionId) { state.sessionId = r.sessionId; resolve(true); }
@@ -214,7 +222,7 @@
 
   function send(text) {
     text = (text || '').trim();
-    if (!text || state.busy) return;
+    if (!text || state.busy || !state.agreed) return;
     starters.hidden = true;
     bubble('me', text);
     input.value = '';
@@ -263,11 +271,23 @@
   }
 
   // ---------- Open / close ----------
+  function showAgreed(on) {
+    agree.hidden = on;
+    starters.hidden = !on || log.querySelector('.est-me') !== null;
+    form.hidden = !on;
+  }
+  agreeBtn.addEventListener('click', function () {
+    state.agreed = true;
+    showAgreed(true);
+    input.focus();
+  });
+
   function open() {
     panel.hidden = false;
     launcher.setAttribute('aria-expanded', 'true');
     if (!log.childElementCount) bubble('ai', state.config.greeting);
-    input.focus();
+    showAgreed(state.agreed);
+    (state.agreed ? input : agreeBtn).focus();
   }
   function shut() {
     panel.hidden = true;
@@ -284,6 +304,7 @@
   fetch('/api/estimate/config').then(function (r) { return r.ok ? r.json() : null; }).then(function (c) {
     if (c && c.enabled) {
       state.config = c;
+      agreeText.textContent = c.notice || 'This chat is answered by an AI service. Please don\u2019t share personal details here.';
       launcher.hidden = false;
       document.documentElement.classList.add('has-estimator');
     }

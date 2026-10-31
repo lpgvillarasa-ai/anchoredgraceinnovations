@@ -6,6 +6,9 @@ import Anthropic from '@anthropic-ai/sdk';
 import { estimate, PRICE_BOOK_VERSION } from './pricebook.mjs';
 import { SYSTEM_PROMPT, ESTIMATE_TOOL, GREETING } from './prompt.mjs';
 
+// Shown in the chat before the first message; the server refuses to start a chat until it is accepted.
+export const AI_NOTICE = 'This chat is answered by an AI service (Anthropic). Please don\u2019t share names, emails, phone numbers or other personal details here. Use the form under your estimate to reach Lee.';
+
 const DEFAULT_MODEL = 'claude-opus-5-5';
 const CALENDLY = 'https://calendly.com/lpg-villarasa/30min';
 const MAX_BODY = 4096;
@@ -233,7 +236,7 @@ export async function handleEstimator(request, env, deps = {}) {
   if (url.pathname === '/admin/leads' && request.method === 'GET') return leadsPage(request, env, store);
 
   if (url.pathname === '/api/estimate/config' && request.method === 'GET') {
-    return json(enabled(env) ? { enabled: true, siteKey: env.TURNSTILE_SITE_KEY, greeting: GREETING } : { enabled: false });
+    return json(enabled(env) ? { enabled: true, siteKey: env.TURNSTILE_SITE_KEY, greeting: GREETING, notice: AI_NOTICE } : { enabled: false });
   }
   if (request.method !== 'POST') return json({ error: 'Not found.' }, 404);
   if (!enabled(env)) return json({ error: 'The estimate assistant is not switched on.' }, 503);
@@ -244,6 +247,8 @@ export async function handleEstimator(request, env, deps = {}) {
   const ipHash = await ipHashOf(request, env);
 
   if (url.pathname === '/api/estimate/start') {
+    // The visitor must accept the AI notice before a chat can start.
+    if (body.aiNotice !== true) return json({ error: 'Please read the note about AI and tap OK first.', reason: 'notice' }, 400);
     if (!(await checkHuman(body.token, request, env))) return json({ error: 'Please complete the quick human check and try again.' }, 403);
     const out = await store.startSession({ ipHash, limits });
     if (!out.ok) return json({ error: SORRY[out.reason] || SORRY.busy, reason: out.reason }, 429);

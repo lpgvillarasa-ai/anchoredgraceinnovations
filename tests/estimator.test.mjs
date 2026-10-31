@@ -192,3 +192,33 @@ test('the off switch has its own name and turns the assistant off', () => {
   assert.equal(enabled({ ...on, ESTIMATE_ASSISTANT: 'off' }), false);
   assert.equal(enabled({ ...on, ESTIMATOR: 'off' }), true, 'ESTIMATOR is the storage binding, not the switch');
 });
+
+test('a chat cannot start until the visitor accepts the AI notice', async () => {
+  const { handleEstimator, AI_NOTICE } = await import('../worker/estimator.mjs');
+  let started = 0;
+  const fakeStore = { startSession: async () => { started++; return { ok: true, sessionId: 's1' }; } };
+  const env = {
+    ANTHROPIC_API_KEY: 'test', TURNSTILE_SECRET: 'test', TURNSTILE_SITE_KEY: 'test',
+    ESTIMATOR: { idFromName: () => 'id', get: () => fakeStore },
+  };
+  const deps = { client: {}, verifyTurnstile: async () => true };
+  const start = (body) => handleEstimator(new Request('https://anchoredgraceinnovation.com/api/estimate/start', {
+    method: 'POST', headers: { origin: 'https://anchoredgraceinnovation.com', 'content-type': 'application/json' }, body: JSON.stringify(body),
+  }), env, deps);
+
+  const config = await (await handleEstimator(new Request('https://anchoredgraceinnovation.com/api/estimate/config'), env, deps)).json();
+  assert.equal(config.notice, AI_NOTICE);
+  assert.match(AI_NOTICE, /AI/);
+
+  for (const body of [{ token: 'x'.repeat(20) }, { token: 'x'.repeat(20), aiNotice: 'yes' }, { token: 'x'.repeat(20), aiNotice: false }]) {
+    const res = await start(body);
+    assert.equal(res.status, 400);
+    assert.equal((await res.json()).reason, 'notice');
+  }
+  assert.equal(started, 0);
+
+  const ok = await start({ token: 'x'.repeat(20), aiNotice: true });
+  assert.equal(ok.status, 200);
+  assert.equal((await ok.json()).sessionId, 's1');
+  assert.equal(started, 1);
+});
