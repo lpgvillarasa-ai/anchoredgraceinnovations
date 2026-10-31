@@ -77,13 +77,22 @@
     var tags = el('div', 'work-tags');
     (p.tags || []).slice(0, 4).forEach(function (t) { tags.appendChild(el('span', 'work-tag', t)); });
     body.appendChild(tags);
-    body.appendChild(el('span', 'work-cta', 'View project →'));
+    var story = /^\/work\/[a-z0-9-]+$/.test(p.story || '') ? p.story : null;
+    body.appendChild(el('span', 'work-cta', story ? 'Read the story →' : 'View project →'));
     c.appendChild(body);
-    // One button over the whole card opens the large preview.
-    var hit = el('button', 'work-hit');
-    hit.type = 'button';
-    hit.setAttribute('aria-haspopup', 'dialog');
-    hit.setAttribute('aria-label', 'Open ' + p.name);
+    // One link or button over the whole card: client sites with a case study open
+    // their story page; every other card opens the large preview.
+    var hit;
+    if (story) {
+      hit = el('a', 'work-hit');
+      hit.href = story;
+      hit.setAttribute('aria-label', 'Read the story: ' + p.name);
+    } else {
+      hit = el('button', 'work-hit');
+      hit.type = 'button';
+      hit.setAttribute('aria-haspopup', 'dialog');
+      hit.setAttribute('aria-label', 'Open ' + p.name);
+    }
     c.appendChild(hit);
     return c;
   }
@@ -292,7 +301,9 @@
     dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
     grid.addEventListener('click', function (e) {
       var hit = e.target.closest && e.target.closest('.work-hit');
-      if (!hit || justDragged) return;
+      if (!hit) return;
+      if (justDragged) { e.preventDefault(); return; }
+      if (hit.tagName === 'A') return; // a story page: let the link open it
       openPreview(hit.closest('.work-card'));
     });
   }
