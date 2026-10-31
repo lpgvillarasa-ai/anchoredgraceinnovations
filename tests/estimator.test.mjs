@@ -25,10 +25,12 @@ test('US client gets dollars, and one-time and monthly are kept apart', () => {
   assert.equal(e.monthly, '$200 to $400 a month');
 });
 
-test('staffing is for businesses outside the Philippines, never quoted to Philippine clients', () => {
+test('staffing is quoted in pesos to Philippine businesses and in dollars overseas', () => {
   const ph = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
-  assert.equal(ph.ok, false);
-  assert.match(ph.problems.join(' '), /outside the Philippines only/);
+  assert.equal(ph.ok, true);
+  assert.equal(ph.monthly, '₱41,000 to ₱55,500 a month');
+  const phEntry = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_data_entry', quantity: 1 }] });
+  assert.equal(phEntry.monthly, '₱35,000 to ₱44,000 a month');
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
   assert.equal(other.ok, true);
   assert.equal(other.monthly, '$1,299 to $1,699 a month');
@@ -36,11 +38,11 @@ test('staffing is for businesses outside the Philippines, never quoted to Philip
   assert.equal(us.monthly, '$1,399 to $1,899 a month');
 });
 
-test('no staffing role starts below $1,199 a month', () => {
+test('no staffing role starts below $1,199 or ₱35,000 a month', () => {
   for (const [id, it] of Object.entries(ITEMS)) {
     if (it.group === 'Staff') {
       assert.ok(it.usd[0] >= 1199, `${id} starts at ${it.usd[0]}`);
-      assert.equal(it.php, undefined, `${id} must have no peso price`);
+      assert.ok(it.php[0] >= 35000, `${id} starts at ₱${it.php[0]}`);
     }
   }
 });
@@ -117,15 +119,15 @@ test('a turn that uses the tool returns the server-computed estimate', async () 
 test('a bad tool request goes back to the AI as an error, not a price', async () => {
   const client = fakeClient([
     { stop_reason: 'tool_use', content: [
-      { type: 'tool_use', id: 'tu_2', name: 'prepare_estimate', input: { client_region: 'philippines', items: [{ item_id: 'staff_admin', quantity: 1 }], project_summary: 'Admin staff' } },
+      { type: 'tool_use', id: 'tu_2', name: 'prepare_estimate', input: { client_region: 'philippines', items: [{ item_id: 'system_care', quantity: 1 }], project_summary: 'Care for my system' } },
     ] },
-    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Our staffing is for businesses outside the Philippines.' }] },
+    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'System care is priced together with a system build.' }] },
   ]);
-  const out = await runTurn(client, {}, [{ role: 'user', content: 'I need an admin assistant for my shop in Cebu' }]);
+  const out = await runTurn(client, {}, [{ role: 'user', content: 'I need care for the system I already have' }]);
   assert.equal(out.estimate, null);
   const result = client.calls[1].messages.at(-1).content[0];
   assert.equal(result.is_error, true);
-  assert.match(result.content, /outside the Philippines only/);
+  assert.match(result.content, /custom system build/);
 });
 
 test('a refusal is reported so nothing is stored', async () => {
@@ -171,6 +173,7 @@ test('a reply may only mention amounts that came from the price book tool', () =
   assert.equal(priceSafe('It usually runs ₱60,000 to ₱120,000.', history), true);
   assert.equal(priceSafe('Roughly ₱60k to ₱120k.', history), true);
   assert.equal(priceSafe('Staffing starts from $1,199 a month.', []), true);
+  assert.equal(priceSafe('In the Philippines, staffing starts from ₱35,000 a month.', []), true);
   assert.equal(priceSafe('Your website will cost $1.', history), false);
   assert.equal(priceSafe('I can do it for ₱45,000.', history), false);
   assert.equal(priceSafe('About 50,000 pesos.', history), false);
