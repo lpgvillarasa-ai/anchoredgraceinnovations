@@ -1,30 +1,65 @@
 // Builds the website's Worker into dist/worker.js:
-//  1. packs every git-tracked site file (minus .assetsignore) into worker/assets.gen.mjs,
-//     so nothing unreviewed or private can go live by accident;
-//  2. bundles worker/index.mjs, the estimate assistant and the Claude SDK into one file.
+//  1. Next.js turns the pages (pages/, components/, legacy/, public/) into plain files in out/;
+//  2. those files are packed into worker/assets.gen.mjs. A file from public/ is packed only
+//     if git tracks it, so nothing unreviewed or private can go live by accident;
+//  3. every small script Next.js writes inside a page gets its fingerprint (hash) recorded,
+//     so the security rules can allow exactly those scripts and nothing else;
+//  4. worker/index.mjs, the estimate assistant and the Claude SDK are bundled into one file.
 // Run: npm run build   (then publish dist/worker.js; see README "Publishing")
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { execSync } from 'node:child_process';
 import { build } from 'esbuild';
 
 const root = process.cwd();
+const outDir = path.join(root, 'out');
 const ignore = fs.readFileSync(path.join(root, '.assetsignore'), 'utf8').split('\n').map((s) => s.trim()).filter(Boolean);
-const tracked = execSync('git ls-files', { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
+const trackedPublic = new Set(
+  execSync('git ls-files public', { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean).map((p) => p.slice('public'.length)),
+);
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
-  '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.mp4': 'video/mp4',
+  '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml',
+  '.webp': 'image/webp', '.avif': 'image/avif', '.mp4': 'video/mp4', '.webm': 'video/webm',
   '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.woff2': 'font/woff2', '.ico': 'image/x-icon',
 };
 
+// Scripts written inside the page (not loaded from a file) that the browser would run.
+const DATA_TYPES = /type="application\/(ld\+)?json"/;
+function inlineScriptHashes(html) {
+  const hashes = [];
+  for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
+    const [, attrs, body] = m;
+    if (/\bsrc=/.test(attrs) || DATA_TYPES.test(attrs) || !body) continue;
+    hashes.push(crypto.createHash('sha256').update(body, 'utf8').digest('base64'));
+  }
+  return hashes;
+}
+
+function walk(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
+}
+
+if (!fs.existsSync(outDir)) throw new Error('out/ is missing: run "next build" first (npm run build does both).');
 const files = {};
-for (const rel of tracked) {
-  const parts = rel.split('/');
-  if (parts.some((p) => p.startsWith('.') || ignore.includes(p)) || ignore.includes(rel) || rel === '_headers') continue;
+const skipped = [];
+for (const abs of walk(outDir)) {
+  const rel = '/' + path.relative(outDir, abs).split(path.sep).join('/');
+  const parts = rel.slice(1).split('/');
+  if (parts.some((p) => (p.startsWith('.') && p !== '.well-known') || ignore.includes(p))) continue;
+  if (fs.existsSync(path.join(root, 'public', rel)) && !trackedPublic.has(rel)) { skipped.push(rel); continue; }
   const type = TYPES[path.extname(rel).toLowerCase()];
   if (!type) continue;
-  files['/' + rel] = { type, b64: fs.readFileSync(path.join(root, rel)).toString('base64') };
+  const buf = fs.readFileSync(abs);
+  const entry = { type, b64: buf.toString('base64') };
+  if (rel.endsWith('.html')) {
+    const hashes = inlineScriptHashes(buf.toString('utf8'));
+    if (hashes.length) entry.scriptHashes = hashes;
+  }
+  files[rel] = entry;
 }
+if (skipped.length) console.warn(`skipped ${skipped.length} file(s) in public/ that git does not track:`, skipped.join(', '));
 
 const rules = [];
 for (const line of fs.readFileSync(path.join(root, '_headers'), 'utf8').split('\n')) {
