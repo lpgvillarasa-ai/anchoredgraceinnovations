@@ -1,15 +1,9 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-// The site's original scripts, per page, in the order they always ran.
-// They load after the page and drive the sections carried over from the old site.
-const SCRIPTS: Record<string, string[]> = {
-  '/': ['projects', 'work', 'main', 'film', 'estimator'],
-  '/staffing': ['main', 'estimator'],
-};
+// The site's original scripts are added by pages/_app.tsx once React has started.
 
 export default class SiteDocument extends Document {
   render() {
-    const scripts = SCRIPTS[this.props.__NEXT_DATA__.page] || ['main', 'estimator'];
     return (
       <Html lang="en">
         <Head>
@@ -26,9 +20,6 @@ export default class SiteDocument extends Document {
         <body id="top">
           <Main />
           <NextScript />
-          {scripts.map((name) => (
-            <script key={name} src={`/js/${name}.js`} defer />
-          ))}
         </body>
       </Html>
     );
