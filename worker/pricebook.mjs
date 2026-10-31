@@ -10,8 +10,10 @@ export const PRICE_BOOK_VERSION = '2026-10-31 draft 5 (approved)';
 
 export const ITEMS = {
   // ----- Build -----
-  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [15000, 30000], usd: [1200, 2500], weeks: '1-2' },
-  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', php: [60000, 120000], usd: [4000, 9000], weeks: '3-6' },
+  // Philippine website prices set to the Cebu market (Lee 2026-10-31): a business
+  // website from ₱35,000, and a landing page always below that.
+  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', php: [15000, 25000], usd: [1200, 2500], weeks: '1-2' },
+  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', php: [35000, 90000], usd: [4000, 9000], weeks: '3-6' },
   premium_website: { group: 'Build', label: 'Premium / animated website', billing: 'once', php: [150000, 300000], usd: [10000, 25000], weeks: '6-12' },
   booking_website: { group: 'Build', label: 'Website with online booking', billing: 'once', php: [80000, 180000], usd: [5000, 12000], weeks: '4-8' },
   online_shop: { group: 'Build', label: 'Online shop (e-commerce)', billing: 'once', php: [100000, 220000], usd: [6000, 15000], weeks: '4-10' },
