@@ -60,16 +60,25 @@ function serveFile(request, url) {
 
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
-    if (url.hostname.startsWith('www.')) {
-      url.hostname = url.hostname.slice(4);
-      return Response.redirect(url.toString(), 301);
-    }
-    if (url.pathname.startsWith('/api/estimate/') || url.pathname === '/admin/leads') {
-      return handleEstimator(request, env);
-    }
-    if (url.pathname === '/api/contact') return handleContact(request, env);
-    if (isMediaPath(url.pathname)) return serveFilm(request, env, headersFor(url.pathname));
-    return serveFile(request, url);
+    const res = await route(request, env);
+    // A preview copy (NOINDEX=1) must never show up in search results.
+    if (env.NOINDEX !== '1') return res;
+    const out = new Response(res.body, res);
+    out.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    return out;
   },
 };
+
+async function route(request, env) {
+  const url = new URL(request.url);
+  if (url.hostname.startsWith('www.')) {
+    url.hostname = url.hostname.slice(4);
+    return Response.redirect(url.toString(), 301);
+  }
+  if (url.pathname.startsWith('/api/estimate/') || url.pathname === '/admin/leads') {
+    return handleEstimator(request, env);
+  }
+  if (url.pathname === '/api/contact') return handleContact(request, env);
+  if (isMediaPath(url.pathname)) return serveFilm(request, env, headersFor(url.pathname));
+  return serveFile(request, url);
+}
