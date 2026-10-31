@@ -10,7 +10,7 @@ test('Philippine website is priced in pesos straight from the price book', () =>
   const e = estimate({ client_region: 'philippines', items: [{ item_id: 'business_website', quantity: 1 }] });
   assert.equal(e.ok, true);
   assert.equal(e.currency, 'PHP');
-  assert.equal(e.one_time, '₱60,000 to ₱120,000');
+  assert.equal(e.one_time, '₱35,000 to ₱90,000');
   assert.equal(e.monthly, null);
   assert.ok(e.notes.some((n) => n.includes('VAT')));
 });
@@ -33,7 +33,7 @@ test('staffing is quoted in dollars overseas, and on a call for Philippine busin
   assert.equal(ph.lines[0].billing, 'call');
   assert.doesNotMatch(JSON.stringify(ph), /₱\s?\d/, 'no peso staffing price');
   const phMixed = estimate({ client_region: 'philippines', items: [{ item_id: 'business_website', quantity: 1 }, { item_id: 'staff_data_entry', quantity: 1 }] });
-  assert.equal(phMixed.one_time, '₱60,000 to ₱120,000');
+  assert.equal(phMixed.one_time, '₱35,000 to ₱90,000');
   assert.equal(phMixed.monthly, null);
   assert.equal(phMixed.lines.length, 2);
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
@@ -105,10 +105,10 @@ test('a turn that uses the tool returns the server-computed estimate', async () 
       { type: 'thinking', thinking: '', signature: 'sig' },
       { type: 'tool_use', id: 'tu_1', name: 'prepare_estimate', input: { client_region: 'philippines', items: [{ item_id: 'landing_page', quantity: 1 }], project_summary: 'Landing page for a cafe' } },
     ] },
-    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'A landing page usually runs ₱15,000 to ₱30,000.' }] },
+    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'A landing page usually runs ₱15,000 to ₱25,000.' }] },
   ]);
   const out = await runTurn(client, {}, [{ role: 'user', content: 'I need a landing page for my cafe in Cebu' }]);
-  assert.equal(out.estimate.one_time, '₱15,000 to ₱30,000');
+  assert.equal(out.estimate.one_time, '₱15,000 to ₱25,000');
   assert.equal(out.summary, 'Landing page for a cafe');
   assert.match(out.reply, /landing page/i);
   // assistant (tool use), tool result, assistant (answer) appended in order, thinking kept unchanged
