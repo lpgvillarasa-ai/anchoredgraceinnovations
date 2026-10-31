@@ -1,5 +1,6 @@
 import type { GetStaticProps } from 'next';
 import Legacy from '@/components/Legacy';
+import HeroSection from '@/components/hero/HeroSection';
 import PageHead from '@/components/PageHead';
 import { readFragments, type Fragments } from '@/lib/legacy';
 
@@ -30,7 +31,7 @@ export default function Home({ f }: { f: Fragments }) {
       <Legacy html={f.sprite} />
       <Legacy html={f.header} />
       <main>
-        <Legacy html={f['01-hero']} />
+        <HeroSection copyHtml={f['01-hero-copy']} />
         <Legacy html={f['02-film']} />
         <Legacy html={f['03-services']} />
         <Legacy html={f['04-concepts']} />
