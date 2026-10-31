@@ -1239,7 +1239,7 @@ html.work-dialog-open { overflow: hidden; }
    Film: plays as you scroll (js/film.js). The section is tall; the stage
    sticks to the screen while the visitor scrolls through it.
    ========================================================================== */
-.film { position: relative; height: 380vh; background: var(--ink); color: var(--cream-text); }
+.film { position: relative; height: 340vh; background: var(--ink); color: var(--cream-text); }
 .film[hidden] { display: none; }
 .film-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .film-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -1258,7 +1258,7 @@ html.work-dialog-open { overflow: hidden; }
 .film-progress { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 30px; height: 2px; background: rgba(244, 241, 235, 0.14); border-radius: 2px; overflow: hidden; }
 .film-progress-fill { display: block; height: 100%; background: var(--gold); transform-origin: left center; transform: scaleX(0); }
 @media (max-width: 720px) {
-  .film { height: 320vh; }
+  .film { height: 240vh; } /* shorter on phones, so the page is quicker to get through */
   .film-chapters { align-items: end; padding-bottom: 84px; }
   .film-shade { background: linear-gradient(0deg, rgba(11, 14, 19, 0.9) 0%, rgba(11, 14, 19, 0.45) 46%, rgba(11, 14, 19, 0.08) 100%); }
   .film-word { margin-bottom: 14px; }

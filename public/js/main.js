@@ -105,20 +105,24 @@
     // Dark glass while the header floats over a dark section.
     const darkZones = document.querySelectorAll('[data-nav-dark]');
     let scrollQueued = false;
+    // All measuring happens first, then all changes: measuring after a change would
+    // force the browser to lay the page out again on every scroll step.
+    let lastProgress = '';
     const onScrollFrame = () => {
       scrollQueued = false;
       const y = window.scrollY || 0;
-      nav.classList.toggle('scrolled', y > 24);
       const probe = 40;
       let onDark = false;
       darkZones.forEach((z) => {
-        if (z.hidden) return;
+        if (onDark || z.hidden) return;
         const r = z.getBoundingClientRect();
         if (r.top <= probe && r.bottom >= probe) onDark = true;
       });
-      nav.classList.toggle('on-dark', onDark);
       const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      progress.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
+      nav.classList.toggle('scrolled', y > 24);
+      nav.classList.toggle('on-dark', onDark);
+      const at = Math.min(1, y / max).toFixed(3);
+      if (at !== lastProgress) { lastProgress = at; progress.style.transform = 'scaleX(' + at + ')'; }
     };
     const queue = () => {
       if (!scrollQueued) {
