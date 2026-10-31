@@ -16,6 +16,8 @@
     { "pattern": "www.anchoredgraceinnovation.com", "custom_domain": true }
   ],
   "durable_objects": { "bindings": [{ "name": "ESTIMATOR", "class_name": "EstimatorStore" }] },
+  // The homepage film's pictures live in our own storage, folder film/ (see worker/film.mjs).
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "agi-website-media" }],
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["EstimatorStore"] }],
   "vars": {
     "TURNSTILE_SITE_KEY": "",
