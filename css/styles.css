@@ -1266,3 +1266,8 @@ html.work-dialog-open { overflow: hidden; }
 .role-prices { list-style: none; margin: 4px 0 22px; padding: 0; display: grid; gap: 0; }
 .role-prices li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(244, 241, 235, 0.12); font-size: 14.5px; color: rgba(244, 241, 235, 0.86); }
 .role-prices li span:last-child { color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Email link in the contact section */
+.contact-email { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(216, 195, 155, 0.45); }
+.contact-email:hover { text-decoration-color: var(--gold); }
+.contact-email:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
