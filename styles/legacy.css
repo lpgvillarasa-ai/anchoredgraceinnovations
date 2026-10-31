@@ -989,7 +989,7 @@ body {
 .work-dialog .work-frame { margin: 0; }
 .work-dialog .work-shot { aspect-ratio: 16 / 10; }
 .work-dialog-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 22px 22px 26px; }
-.work-dialog-kicker { font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gold-deep); }
+.work-dialog-kicker { font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
 .work-dialog-title { font: 600 clamp(24px, 2.6vw, 32px)/1.15 var(--font-display); letter-spacing: -0.02em; margin: 0; }
 .work-dialog-line { font-size: 16px; line-height: 1.6; color: #50545b; margin: 0; }
 .work-dialog-go { margin-top: 8px; }
@@ -1335,3 +1335,16 @@ html.work-dialog-open { overflow: hidden; }
 
 /* The founder link in the footer text is underlined, not only coloured */
 .footer-brand p a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Project preview: what's inside, how it connects, and its buttons */
+.work-dialog-subhead { margin-top: 6px; font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
+.work-feature-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.work-feature-list li { position: relative; padding-left: 25px; font-size: 14.5px; line-height: 1.45; color: var(--body); }
+.work-feature-list li::before {
+  content: ""; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2 5 8.5l4.5-5' fill='none' stroke='%23D8C39B' stroke-width='1.8'/%3E%3C/svg%3E") center / 10px no-repeat;
+}
+.work-dialog-connected { margin: 2px 0 0; padding: 11px 13px; border-radius: 12px; background: rgba(216, 195, 155, 0.2); border: 1px solid rgba(122, 95, 46, 0.25); font-size: 13.5px; line-height: 1.5; color: var(--body); }
+.work-dialog-connected b { display: block; margin-bottom: 3px; font: 500 10.5px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
+.work-dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.work-dialog-actions .work-dialog-go { margin-top: 0; }
