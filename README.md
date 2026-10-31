@@ -5,33 +5,36 @@ lands: our services, our work, and a button to book a discovery call.
 
 ## What is on the page
 
-- **Services:** three pillars (Build, Automate, Staff) plus marketing videos as an add-on
-- **Our work:** a gallery with filters (client websites, our products, business systems)
-- **Marketing videos:** hidden until videos are added (see below)
-- **AI-native talent, how it works, ways to work with us, book a call**
+Homepage, top to bottom: the hero with a "pick your business" switcher, a "Built with"
+strip, the Anchored / Built / Staffed film, six working service tiles, "Try it live"
+demos, concept sites with preview clips, Our work, the founder, our promises, marketing
+videos, staffing, how it works, ways to work with us, questions, and contact (with a
+note form). Other pages: `/staffing`, three case studies at `/work/<name>`, `/privacy`.
+
+Placeholders for Lee to fill in are written in [square brackets] on the page.
 
 ## Changing the project list (the only file you need)
 
-Open `js/projects.js`. Each project is one block. To hide one without deleting it,
+Open `public/js/projects.js`. Each project is one block. To hide one without deleting it,
 set `show: false`. To show a site that just launched, set `show: true`.
 
 Rules we follow:
 - A client's name appears only once their site is public.
 - Private systems hold real people's data: we describe them, never link or open them.
-- Screenshots live in `media/work/` and are stored with the site, not loaded from
+- Screenshots live in `public/media/work/` and are stored with the site, not loaded from
   another company's service.
 
-To add videos, put the `.mp4` and a still picture in `media/` and add an entry to
-`AGI_VIDEOS` at the bottom of `js/projects.js`. The video section appears by itself.
+To add videos, put the `.mp4` and a still picture in `public/media/` and add an entry to
+`AGI_VIDEOS` at the bottom of `public/js/projects.js`. The video section appears by itself.
 
 ## Brand
 
 - **Logo:** an anchor whose ring is a gold spark: a steady foundation with AI on top.
 - **Fonts:** Geist (headings and text) and Geist Mono (small labels). Both free for commercial use.
-- **Colors:** midnight `#0B0E13`, champagne `#D8C39B` (on dark), deep champagne `#8F7547`
-  (champagne text on light backgrounds), paper `#F4F1EB`.
+- **Colors:** midnight `#0B0E13`, champagne `#D8C39B` (on dark), deep champagne `#7A5F2E`
+  (champagne text on light backgrounds, dark enough to read), paper `#F4F1EB`.
 
-Logo files live in `brand/` (the text is drawn as shapes, so they look right anywhere):
+Logo files live in `public/brand/` (the text is drawn as shapes, so they look right anywhere):
 
 | File | Use it for |
 | --- | --- |
@@ -45,22 +48,31 @@ Use the SVG whenever a tool accepts it (Canva, Figma, printers); PNGs are for ev
 
 ## Stack
 
-Plain HTML, CSS and JavaScript. No build step.
+Next.js (Pages Router) with TypeScript and Tailwind, built into plain files. Nothing runs
+on a Next.js server: the Cloudflare Worker serves the built files.
 
-- `index.html`: the page
-- `css/styles.css`: all styles (colours and fonts at the top, in `:root`)
-- `js/projects.js`: the project and video list
-- `js/work.js`: draws the gallery from that list
-- `js/main.js`: scroll animations, menu
+- `pages/`: one file per page (`index.tsx`, `staffing.tsx`, `work/[slug].tsx`, `privacy.tsx`)
+- `components/`: the newer sections (hero switcher, service tiles, demos, founder, FAQ, contact form...)
+- `legacy/`: sections carried over unchanged from the hand-written site, as plain HTML
+- `public/js/`: the original scripts that still drive those sections (menu, reveal, work
+  rail, film, estimate chat). `pages/_app.tsx` starts them once React has started.
+- `styles/legacy.css`: the original stylesheet; `styles/globals.css` adds the fonts and
+  Tailwind. Tailwind classes start with `tw:` (for example `tw:bg-ink`) so they never
+  clash with the original class names; brand colours are in `globals.css`.
+- `lib/caseStudies.ts`: the case study pages
+- `worker/`: the Cloudflare Worker (pages, estimate assistant, contact form, film files)
 - `_headers`: security rules (which outside sources the page may load)
 
 ## Run locally
 
 ```sh
-python3 -m http.server 8000
+npm install
+npm run build
+npx wrangler dev
 ```
 
-Then visit http://localhost:8000.
+Then visit http://localhost:8787 (the film and video files load only on the live site).
+`npm run dev` starts Next.js alone, without the Worker, for quick layout work.
 
 ## Publishing
 
@@ -74,8 +86,10 @@ npm run build
 npx wrangler deploy
 ```
 
-`npm run build` packs every **git-tracked** site file (minus `.assetsignore`) together with
-the assistant into `dist/worker.js`, so nothing unreviewed or private can go live by accident.
+`npm run build` runs Next.js (out/) and packs the result together with the assistant into
+`dist/worker.js`. A file from `public/` is packed only if git tracks it, so nothing unreviewed
+or private can go live by accident. The build also records the fingerprint of the small
+script Next.js writes inside each page, and the Worker allows exactly those scripts.
 
 ## Estimate assistant
 
