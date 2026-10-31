@@ -25,24 +25,31 @@ test('US client gets dollars, and one-time and monthly are kept apart', () => {
   assert.equal(e.monthly, '$200 to $400 a month');
 });
 
-test('staffing is quoted in pesos to Philippine businesses and in dollars overseas', () => {
+test('staffing is quoted in dollars overseas, and on a call for Philippine businesses', () => {
   const ph = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
   assert.equal(ph.ok, true);
-  assert.equal(ph.monthly, '₱41,000 to ₱55,500 a month');
-  const phEntry = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_data_entry', quantity: 1 }] });
-  assert.equal(phEntry.monthly, '₱35,000 to ₱44,000 a month');
+  assert.equal(ph.monthly, null);
+  assert.equal(ph.lines[0].range, 'Price confirmed on a free discovery call');
+  assert.equal(ph.lines[0].billing, 'call');
+  assert.doesNotMatch(JSON.stringify(ph), /₱\s?\d/, 'no peso staffing price');
+  const phMixed = estimate({ client_region: 'philippines', items: [{ item_id: 'business_website', quantity: 1 }, { item_id: 'staff_data_entry', quantity: 1 }] });
+  assert.equal(phMixed.one_time, '₱60,000 to ₱120,000');
+  assert.equal(phMixed.monthly, null);
+  assert.equal(phMixed.lines.length, 2);
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
   assert.equal(other.ok, true);
-  assert.equal(other.monthly, '$1,299 to $1,699 a month');
+  assert.equal(other.monthly, '$1,599 to $1,999 a month');
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
-  assert.equal(us.monthly, '$1,399 to $1,899 a month');
+  assert.equal(us.monthly, '$1,699 to $2,199 a month');
+  const entry = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_data_entry', quantity: 1 }] });
+  assert.equal(entry.monthly, '$1,499 to $1,799 a month');
 });
 
-test('no staffing role starts below $1,199 or ₱35,000 a month', () => {
+test('no staffing role starts below $1,499 a month, and none has a peso price', () => {
   for (const [id, it] of Object.entries(ITEMS)) {
     if (it.group === 'Staff') {
-      assert.ok(it.usd[0] >= 1199, `${id} starts at ${it.usd[0]}`);
-      assert.ok(it.php[0] >= 35000, `${id} starts at ₱${it.php[0]}`);
+      assert.ok(it.usd[0] >= 1499, `${id} starts at ${it.usd[0]}`);
+      assert.equal(it.php, 'call', `${id} must be priced on a call in the Philippines`);
     }
   }
 });
@@ -172,8 +179,9 @@ test('a reply may only mention amounts that came from the price book tool', () =
   ];
   assert.equal(priceSafe('It usually runs ₱60,000 to ₱120,000.', history), true);
   assert.equal(priceSafe('Roughly ₱60k to ₱120k.', history), true);
-  assert.equal(priceSafe('Staffing starts from $1,199 a month.', []), true);
-  assert.equal(priceSafe('In the Philippines, staffing starts from ₱35,000 a month.', []), true);
+  assert.equal(priceSafe('Staffing starts from $1,499 a month.', []), true);
+  assert.equal(priceSafe('Staffing starts from $1,199 a month.', []), false);
+  assert.equal(priceSafe('In the Philippines, staffing starts from ₱35,000 a month.', []), false);
   assert.equal(priceSafe('Your website will cost $1.', history), false);
   assert.equal(priceSafe('I can do it for ₱45,000.', history), false);
   assert.equal(priceSafe('About 50,000 pesos.', history), false);
