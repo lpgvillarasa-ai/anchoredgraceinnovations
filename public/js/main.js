@@ -1,4 +1,13 @@
 (() => {
+  // Anything already on screen when this script runs shows at once, with no
+  // animation (.instant). Done before .js is added, so nothing visible blinks out.
+  const inView = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+  };
+  const showNow = (el) => el.classList.add('in', 'instant');
+  document.querySelectorAll('[data-reveal]').forEach((el) => { if (inView(el)) showNow(el); });
+
   // Marks that JS is available; [data-reveal] elements are only hidden under .js
   document.documentElement.classList.add('js');
 
@@ -33,7 +42,8 @@
     heroTitle.style.removeProperty('--d');
   }
 
-  // Scroll reveal — elements above the fold intersect immediately and animate on load
+  // Scroll reveal: a short entrance (0.35s) that starts when about 10% of an
+  // element shows, a little before it reaches the screen.
   const reveals = document.querySelectorAll('[data-reveal]');
   if (hasIO) {
     const io = new IntersectionObserver((entries) => {
@@ -43,21 +53,34 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach((el) => io.observe(el));
-    // Failsafe: if the observer misfires, force only elements currently in the
-    // viewport. Off-screen elements stay observed so their reveal still plays
-    // on scroll instead of firing invisibly at t=2.4s.
+    }, { threshold: 0.1, rootMargin: '0px 0px 10% 0px' });
+    reveals.forEach((el) => { if (!el.classList.contains('in')) io.observe(el); });
+
+    // Menu jumps: the section you jump to (and anything on screen when you land)
+    // shows at once, so it never looks empty while it would still be fading in.
+    const revealSection = (hash) => {
+      const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+      const target = id && document.getElementById(id);
+      if (!target) return;
+      const group = target.matches('[data-reveal]') ? [target] : [];
+      group.concat(Array.from(target.querySelectorAll('[data-reveal]'))).forEach((el) => {
+        if (!el.classList.contains('in')) { showNow(el); io.unobserve(el); }
+      });
+    };
+    document.addEventListener('click', (e) => {
+      const a = e.target instanceof Element && e.target.closest('a[href*="#"]');
+      if (!a || a.origin !== location.origin || a.pathname !== location.pathname) return;
+      revealSection(a.hash);
+    });
+    window.addEventListener('hashchange', () => revealSection(location.hash));
+    if (location.hash) revealSection(location.hash);
+
+    // Failsafe: if the observer misfires, show whatever is on screen.
     setTimeout(() => {
       reveals.forEach((el) => {
-        if (el.classList.contains('in')) return;
-        const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) {
-          el.classList.add('in');
-          io.unobserve(el);
-        }
+        if (!el.classList.contains('in') && inView(el)) { el.classList.add('in'); io.unobserve(el); }
       });
-    }, 2400);
+    }, 1200);
     // Keyboard users: never leave focus inside a still-hidden reveal group
     document.addEventListener('focusin', (e) => {
       const host = e.target instanceof Element && e.target.closest('[data-reveal]');

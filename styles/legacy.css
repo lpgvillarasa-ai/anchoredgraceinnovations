@@ -268,12 +268,21 @@ body {
 .btn-gold.btn-xl { box-shadow: 0 16px 34px -14px rgba(216, 195, 155, 0.7); }
 .btn-gold.btn-xl:hover { box-shadow: 0 22px 44px -14px rgba(216, 195, 155, 0.8); background: #e6d5b2; }
 .btn-ghost {
+  /* button elements get a grey browser background unless told otherwise */
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
   border: 1.5px solid rgba(244, 241, 235, 0.35);
   color: var(--cream-text);
   padding: 16px 28px;
   transition: border-color .25s, background .25s;
 }
-.btn-ghost:hover { border-color: rgba(244, 241, 235, 0.7); background: rgba(244, 241, 235, 0.06); }
+.btn-ghost:hover { border-color: rgba(244, 241, 235, 0.7); background: rgba(244, 241, 235, 0.1); color: var(--cream-text); }
+.btn-ghost:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.has-estimator .btn.est-only { justify-content: center; align-items: center; }
 
 /* ============ Nav ============ */
 /* The header floats: a rounded glass bar a little below the top edge. Only the
@@ -1274,3 +1283,44 @@ html.work-dialog-open { overflow: hidden; }
 
 /* Second price list on the staffing card: peso prices for businesses in the Philippines */
 .role-prices-title { margin: 6px 0 0; font-size: 14px; color: rgba(244, 241, 235, 0.72); }
+
+/* ============ Quick reveals ============
+   Entrances are short (0.35s) and barely staggered, so a section reached from the
+   menu never looks empty. Content that is already on screen, or that you jump to,
+   gets .instant from js/main.js and shows at once with no animation. */
+@keyframes agiUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.js [data-reveal].in { animation-duration: .35s; animation-delay: calc(var(--d, 0s) * .3); }
+.hero-title .wi { animation-duration: .38s; animation-delay: calc(.05s + var(--wi) * 25ms); }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > * { animation-duration: .35s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(2) { animation-delay: .04s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(3) { animation-delay: .08s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(4) { animation-delay: .12s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(5) { animation-delay: .16s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(6) { animation-delay: .2s; }
+.js .mission[data-reveal].in .value { animation-duration: .35s; }
+.js .mission[data-reveal].in .value:nth-child(1) { animation-delay: .04s; }
+.js .mission[data-reveal].in .value:nth-child(2) { animation-delay: .08s; }
+.js .mission[data-reveal].in .value:nth-child(3) { animation-delay: .12s; }
+.js .mission[data-reveal].in .value:nth-child(4) { animation-delay: .16s; }
+.js .steps[data-reveal].in .steps-line { transition: transform .38s var(--ease-out); }
+.js .steps[data-reveal].in .step,
+.js .steps[data-reveal].in .step-num { animation-duration: .35s; }
+.js .steps[data-reveal].in .step:nth-child(2),
+.js .steps[data-reveal].in .step:nth-child(2) .step-num { animation-delay: 0s; }
+.js .steps[data-reveal].in .step:nth-child(3),
+.js .steps[data-reveal].in .step:nth-child(3) .step-num { animation-delay: .06s; }
+.js .steps[data-reveal].in .step:nth-child(4),
+.js .steps[data-reveal].in .step:nth-child(4) .step-num { animation-delay: .12s; }
+.js .steps[data-reveal].in .step:nth-child(5),
+.js .steps[data-reveal].in .step:nth-child(5) .step-num { animation-delay: .18s; }
+
+.js [data-reveal].instant,
+.js [data-reveal].instant > *,
+.js [data-reveal].instant .value,
+.js [data-reveal].instant .step,
+.js [data-reveal].instant .step-num { opacity: 1 !important; animation: none !important; }
+.js [data-reveal].instant .steps-line,
+.js [data-reveal].instant .kicker::before { transform: none !important; transition: none !important; }
