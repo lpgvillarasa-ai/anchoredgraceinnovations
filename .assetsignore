@@ -10,3 +10,9 @@ README.md
 wrangler.jsonc
 .assetsignore
 tools
+showcase
+worker
+tests
+package.json
+package-lock.json
+dist

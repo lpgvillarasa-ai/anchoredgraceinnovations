@@ -87,6 +87,12 @@ window.AGI_PROJECTS = [
     line: 'Our own CRM: every client from first call to final payment, with referral commissions.',
     tags: ['CRM', 'Sales'], img: 'media/work/agency-pipeline.jpg', show: true,
   },
+  {
+    name: 'Restaurant POS: live demo', group: 'product', kind: 'Try it live',
+    line: 'Sign in as Demo Admin with PIN 111111. Sample data only; nothing you enter leaves your browser.',
+    tags: ['POS', 'Demo'], url: 'https://posdemo.anchoredgraceinnovation.com', img: 'media/work/concept-posdemo.jpg', show: true,
+  },
+
   // ---------- Private systems (general names only) ----------
   {
     name: 'Clinic operations system', group: 'system', kind: 'Web app',
