@@ -32,13 +32,13 @@ test('staffing is US only, never quoted to Philippine or other clients', () => {
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
   assert.equal(other.ok, false);
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
-  assert.equal(us.monthly, '$1,499 to $2,000 a month');
+  assert.equal(us.monthly, '$1,399 to $1,899 a month');
 });
 
-test('no staffing role starts below $1,499 a month', () => {
+test('no staffing role starts below $1,199 a month', () => {
   for (const [id, it] of Object.entries(ITEMS)) {
     if (it.group === 'Staff') {
-      assert.ok(it.usd[0] >= 1499, `${id} starts at ${it.usd[0]}`);
+      assert.ok(it.usd[0] >= 1199, `${id} starts at ${it.usd[0]}`);
       assert.equal(it.php, undefined, `${id} must have no peso price`);
     }
   }
@@ -95,10 +95,10 @@ test('a turn that uses the tool returns the server-computed estimate', async () 
       { type: 'thinking', thinking: '', signature: 'sig' },
       { type: 'tool_use', id: 'tu_1', name: 'prepare_estimate', input: { client_region: 'philippines', items: [{ item_id: 'landing_page', quantity: 1 }], project_summary: 'Landing page for a cafe' } },
     ] },
-    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'A landing page usually runs ₱18,000 to ₱35,000.' }] },
+    { stop_reason: 'end_turn', content: [{ type: 'text', text: 'A landing page usually runs ₱15,000 to ₱30,000.' }] },
   ]);
   const out = await runTurn(client, {}, [{ role: 'user', content: 'I need a landing page for my cafe in Cebu' }]);
-  assert.equal(out.estimate.one_time, '₱18,000 to ₱35,000');
+  assert.equal(out.estimate.one_time, '₱15,000 to ₱30,000');
   assert.equal(out.summary, 'Landing page for a cafe');
   assert.match(out.reply, /landing page/i);
   // assistant (tool use), tool result, assistant (answer) appended in order, thinking kept unchanged
@@ -169,7 +169,7 @@ test('a reply may only mention amounts that came from the price book tool', () =
   ];
   assert.equal(priceSafe('It usually runs ₱60,000 to ₱120,000.', history), true);
   assert.equal(priceSafe('Roughly ₱60k to ₱120k.', history), true);
-  assert.equal(priceSafe('Staffing starts from $1,499 a month.', []), true);
+  assert.equal(priceSafe('Staffing starts from $1,199 a month.', []), true);
   assert.equal(priceSafe('Your website will cost $1.', history), false);
   assert.equal(priceSafe('I can do it for ₱45,000.', history), false);
   assert.equal(priceSafe('About 50,000 pesos.', history), false);

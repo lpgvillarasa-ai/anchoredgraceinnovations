@@ -1206,3 +1206,8 @@ a.work-card:hover { transform: translateY(-6px); border-color: rgba(216, 195, 15
 .film.is-still .film-chapters { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 56px; min-height: 100svh; padding-top: 120px; padding-bottom: 120px; }
 .film.is-still .film-chapter { opacity: 1; transform: none; }
 .film.is-still .film-progress { display: none; }
+
+/* Staffing page: price per role inside the dark price box. */
+.role-prices { list-style: none; margin: 4px 0 22px; padding: 0; display: grid; gap: 0; }
+.role-prices li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid rgba(244, 241, 235, 0.12); font-size: 14.5px; color: rgba(244, 241, 235, 0.86); }
+.role-prices li span:last-child { color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
