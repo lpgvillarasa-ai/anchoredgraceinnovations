@@ -68,7 +68,12 @@ export default {
     const origin = SITES[url.hostname];
     if (!origin) return new Response('Not found', { status: 404 });
 
-    const upstream = new URL(url.pathname + url.search, `https://${origin}`);
+    // Start from the approved host, then copy the path in. A path such as
+    // "//other.site/x" must never be able to change which site we call.
+    const upstream = new URL(`https://${origin}`);
+    upstream.pathname = url.pathname;
+    upstream.search = url.search;
+    if (upstream.host !== origin) return new Response('Not found', { status: 404 });
     const headers = new Headers(request.headers);
     headers.delete('host');
     headers.set('x-forwarded-host', url.hostname);
