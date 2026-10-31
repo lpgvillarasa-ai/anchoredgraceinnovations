@@ -95,7 +95,7 @@
     }).catch(function () {
       making[i] = false;
       canBitmap = false; // fall back to plain pictures
-      requestUpdate();
+      if (shown < 0 || REDUCED) draw(i); else requestUpdate();
     });
   }
   function keepNear(i) {
@@ -120,13 +120,16 @@
     shown = i;
   }
   // Plain picture, only for browsers that cannot unpack pictures in the background.
+  // It uses the picture's own address (already in the browser's cache), which the
+  // site's security rules allow. Once loaded, it is drawn straight away if nothing
+  // is on screen yet or motion is reduced (no scroll updates run then).
   function imgOf(i) {
     var f = frames[i];
     if (canBitmap || !f || !f.ready) return null;
     if (!f.img) {
       f.img = new Image();
-      f.img.onload = requestUpdate;
-      f.img.src = f.blob ? URL.createObjectURL(f.blob) : frameUrl(i);
+      f.img.onload = function () { if (shown < 0 || REDUCED) draw(i); else requestUpdate(); };
+      f.img.src = frameUrl(i);
     }
     return f.img;
   }
