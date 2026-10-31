@@ -7,6 +7,8 @@ import DemosSection from '@/components/DemosSection';
 import ConceptCards from '@/components/ConceptCards';
 import FounderSection from '@/components/FounderSection';
 import PromisesSection from '@/components/PromisesSection';
+import ContactSection from '@/components/ContactSection';
+import FaqSection, { FAQ_JSON_LD } from '@/components/FaqSection';
 import PageHead from '@/components/PageHead';
 import { readFragments, type Fragments } from '@/lib/legacy';
 
@@ -32,7 +34,7 @@ export default function Home({ f }: { f: Fragments }) {
         path="/"
         ogTitle="Anchored Grace Innovations"
         ogDescription="Websites, custom web apps, AI inside your systems, and AI-native staff. Based in Cebu, serving clients worldwide."
-        jsonLd={[JSON_LD]}
+        jsonLd={[JSON_LD, FAQ_JSON_LD]}
       />
       <Legacy html={f.sprite} />
       <Legacy html={f.header} />
@@ -50,7 +52,8 @@ export default function Home({ f }: { f: Fragments }) {
         <Legacy html={f['07-talent']} />
         <Legacy html={f['08-process']} />
         <Legacy html={f['09-pricing']} />
-        <Legacy html={f['10-contact']} />
+        <FaqSection />
+        <ContactSection copyHtml={f['10-contact-copy']} />
       </main>
       <Legacy html={f.footer} />
     </>

@@ -105,7 +105,7 @@ export default function ConceptCards() {
       <div className="container">
         <div className="section-head split">
           <div>
-            <div className="kicker">02 / SIGNATURE CONCEPTS</div>
+            <div className="kicker">03 / SIGNATURE CONCEPTS</div>
             <h2 className="h2">Websites people remember.</h2>
           </div>
           <p className="section-aside">Our own concept builds: AI-generated film, scrubbed frame by frame as you scroll. Open one and scroll.</p>

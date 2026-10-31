@@ -1324,3 +1324,11 @@ html.work-dialog-open { overflow: hidden; }
 .js [data-reveal].instant .step-num { opacity: 1 !important; animation: none !important; }
 .js [data-reveal].instant .steps-line,
 .js [data-reveal].instant .kicker::before { transform: none !important; transition: none !important; }
+
+/* Contact section with the note form beside it (wide screens): text aligns left */
+@media (min-width: 1025px) {
+  .contact-split { text-align: left; }
+  .contact-split .contact-inner { margin: 0; }
+  .contact-split .contact-sub { margin-left: 0; }
+  .contact-split .contact-ctas { justify-content: flex-start; }
+}

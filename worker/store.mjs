@@ -111,6 +111,18 @@ export class EstimatorStore extends DurableObject {
     return { ok: true, summary: s.summary || '', estimate: s.estimate ? JSON.parse(s.estimate) : null };
   }
 
+  // A note from the contact form on the homepage ("Not ready for a call?"). Saved
+  // with the chat enquiries so Lee sees both on /admin/leads. At most 3 a day from
+  // one visitor and 200 a day in all, so a bot cannot flood the list.
+  saveNote({ ipHash, name, email, note }) {
+    this.tidy();
+    if (!this.bump(`ip:${ipHash}:notes`, 3, 24 * HOUR)) return { ok: false, reason: 'ip_daily' };
+    if (!this.bump('all:notes', 200, 24 * HOUR)) return { ok: false, reason: 'busy' };
+    this.sql.exec('INSERT INTO leads (created, session_id, name, email, business, note, summary, estimate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      Date.now(), 'contact-form', name, email, '', note, 'Contact form note', '');
+    return { ok: true };
+  }
+
   listLeads() {
     return this.sql.exec('SELECT id, created, name, email, business, note, summary, estimate FROM leads ORDER BY id DESC LIMIT 200').toArray();
   }
