@@ -106,6 +106,16 @@
     onScrollFrame();
   }
 
+  // Email links: the address is put together here, not written in the page, so
+  // the simple robots that collect addresses for spam mostly miss it.
+  document.querySelectorAll('[data-email]').forEach((link) => {
+    const [user, domain] = (link.dataset.email || '').split('|');
+    if (!user || !domain || !/^[a-z0-9.-]+$/i.test(domain) || !/^[a-z0-9._+-]+$/i.test(user)) return;
+    const address = user + '@' + domain;
+    link.href = 'mailto:' + address;
+    if (link.classList.contains('contact-email')) link.textContent = address;
+  });
+
   // Mobile menu
   const toggle = document.querySelector('[data-nav-toggle]');
   const menu = document.querySelector('[data-nav-menu]');
