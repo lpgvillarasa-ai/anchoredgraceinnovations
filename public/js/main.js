@@ -18,8 +18,10 @@
   // Hero headline word-mask rise — must run BEFORE the reveal observer registers.
   // Words stay real text nodes (whitespace preserved) so selection, copy and
   // screen readers are unaffected. data-reveal is stripped so agiUp can't double-fire.
+  // Skipped when the headline is already on screen (the usual case, since this script
+  // now starts after the page is shown): re-animating visible text makes it blink out.
   const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle && !REDUCED) {
+  if (heroTitle && !REDUCED && !heroTitle.classList.contains('instant')) {
     const parts = heroTitle.textContent.split(/(\s+)/);
     heroTitle.textContent = '';
     let wordIndex = 0;

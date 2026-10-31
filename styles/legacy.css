@@ -473,7 +473,7 @@ body {
   flex-shrink: 0;
 }
 .float-card-title { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; color: var(--ink); line-height: 1.1; }
-.float-card-sub { font-size: 11px; color: #7a746a; margin-top: 2px; }
+.float-card-sub { font-size: 11px; color: #5f5a52; margin-top: 2px; }
 
 /* ============ Trust strip ============ */
 .trust { border-top: 1px solid rgba(11, 14, 19, 0.08); border-bottom: 1px solid rgba(11, 14, 19, 0.08); background: var(--cream-band); }
@@ -489,7 +489,7 @@ body {
 /* ============ Shared section bits ============ */
 .section { padding: clamp(88px, 10vw, 128px) var(--gutter); scroll-margin-top: 90px; }
 .section-bottom { padding: 0 var(--gutter) clamp(88px, 10vw, 128px); scroll-margin-top: 90px; }
-.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: var(--gold-deep); margin-bottom: 16px; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: #7A5F2E; margin-bottom: 16px; }
 .kicker.gold { color: var(--gold); }
 .h2 {
   font-family: var(--font-display);
@@ -749,7 +749,7 @@ body {
 .btn-plan { display: block; text-align: center; padding: 13px; font-size: 14.5px; }
 .btn-gold.btn-plan { transition: background .2s, transform .25s var(--ease-out); box-shadow: none; }
 .btn-gold.btn-plan:hover { background: #e6d5b2; transform: translateY(-1px); box-shadow: none; }
-.pricing-note { font-family: var(--font-mono); font-size: 11px; color: #9a9284; margin: 22px 0 0; }
+.pricing-note { font-family: var(--font-mono); font-size: 11px; color: #6b655b; margin: 22px 0 0; }
 
 /* ============ Contact / CTA ============ */
 .contact {
@@ -1332,3 +1332,6 @@ html.work-dialog-open { overflow: hidden; }
   .contact-split .contact-sub { margin-left: 0; }
   .contact-split .contact-ctas { justify-content: flex-start; }
 }
+
+/* The founder link in the footer text is underlined, not only coloured */
+.footer-brand p a { text-decoration: underline; text-underline-offset: 3px; }

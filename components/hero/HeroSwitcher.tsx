@@ -85,7 +85,7 @@ function Panel({ ind, shown }: { ind: Industry; shown: boolean }) {
           <span className="tw:size-2.5 tw:rounded-full tw:bg-[#3a3f48]" />
           <span className="tw:ml-2 tw:flex tw:min-w-0 tw:flex-1 tw:items-center tw:gap-1.5 tw:truncate tw:rounded-md tw:bg-white/[0.06] tw:px-2.5 tw:py-1 tw:font-mono tw:text-[10.5px] tw:text-[#a9adb4] tw:sm:text-[11px]">
             <svg viewBox="0 0 16 16" aria-hidden="true" className="tw:size-3 tw:shrink-0 tw:fill-none tw:stroke-current tw:[stroke-width:1.6]"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" /></svg>
-            <span className="tw:truncate">{ind.domain} <span className="tw:text-[#7d828a]">(example)</span></span>
+            <span className="tw:truncate">{ind.domain} <span className="tw:text-[#9ba0a8]">(example)</span></span>
           </span>
         </div>
         <div className="tw:overflow-hidden tw:rounded-lg tw:bg-paper tw:px-5 tw:pb-36 tw:pt-4 tw:sm:px-7 tw:sm:pb-7 tw:sm:pr-48">
