@@ -71,11 +71,18 @@ test('unknown items and empty requests are refused, not guessed', () => {
 test('system care is a share of the system build, with a minimum', () => {
   const e = estimate({ client_region: 'philippines', items: [{ item_id: 'pos_inventory', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
   assert.equal(e.ok, true);
-  // 1.25% of $3,350 = $42 -> minimum $125; 1.5% of $7,500 = $113 -> $125 (tidied to $25)
+  // 1.25% of $3,350 = $42 -> minimum $125; 1.75% of $7,500 = $131 -> $125 (tidied to $25)
   assert.equal(e.monthly, '$125 to $125 a month');
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'pos_inventory', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
   // 1.25% of $12,000 = $150 -> minimum $300; 1.5% of $25,000 = $375 -> $400 (tidied to $50)
   assert.equal(us.monthly, '$300 to $400 a month');
+  // Above the minimum, Philippine care keeps 1.25% to 1.75%; overseas is 1.25% to 1.5%.
+  const phBig = estimate({ client_region: 'philippines', items: [{ item_id: 'multi_module_system', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
+  // 1.25% of $11,650 = $146 -> $150; 1.75% of $25,000 = $438 -> $450 (tidied to $25)
+  assert.equal(phBig.monthly, '$150 to $450 a month');
+  const usBig = estimate({ client_region: 'united_states', items: [{ item_id: 'multi_module_system', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
+  // 1.25% of $30,000 = $375 -> $400; 1.5% of $70,000 = $1,050 (tidied to $50)
+  assert.equal(usBig.monthly, '$400 to $1,050 a month');
   const alone = estimate({ client_region: 'philippines', items: [{ item_id: 'system_care', quantity: 1 }] });
   assert.equal(alone.ok, false);
 });

@@ -67,7 +67,7 @@ export const ITEMS = {
   website_care_basic: { group: 'Care', label: 'Website care, basic', billing: 'month', ph: [50, 75], usd: [75, 150] },
   website_care_plus: { group: 'Care', label: 'Website care plus', billing: 'month', ph: [100, 200], usd: [150, 300] },
   shop_care: { group: 'Care', label: 'Online shop care', billing: 'month', ph: [175, 425], usd: [200, 500] },
-  system_care: { group: 'Care', label: 'System care for a custom web app (1.25% to 1.5% of the build price a month)', billing: 'month', percentOfSystems: [0.0125, 0.015], minimum: { ph: 125, usd: 300 } },
+  system_care: { group: 'Care', label: 'System care for a custom web app (a share of the build price each month)', billing: 'month', percentOfSystems: { ph: [0.0125, 0.0175], usd: [0.0125, 0.015] }, minimum: { ph: 125, usd: 300 } },
 };
 
 export const ITEM_IDS = Object.keys(ITEMS);
@@ -123,8 +123,8 @@ export function estimate({ client_region, items }) {
     } else {
       const care = ITEMS.system_care;
       const min = care.minimum[key];
-      const low = Math.max(tidy(systemLow * care.percentOfSystems[0], key), min);
-      const high = Math.max(tidy(systemHigh * care.percentOfSystems[1], key), min);
+      const low = Math.max(tidy(systemLow * care.percentOfSystems[key][0], key), min);
+      const high = Math.max(tidy(systemHigh * care.percentOfSystems[key][1], key), min);
       monthLow += low; monthHigh += high;
       lines.push({ item_id: 'system_care', label: care.label, billing: 'month', low, high, range: `${money(low)} to ${money(high)}`, weeks: null });
     }
