@@ -16,13 +16,15 @@ test('Philippine website is priced in dollars straight from the price book', () 
 });
 
 test('US client gets dollars, and one-time and monthly are kept apart', () => {
+  const site = estimate({ client_region: 'united_states', items: [{ item_id: 'business_website', quantity: 1 }] });
+  assert.equal(site.one_time, '$1,500 to $4,000');
   const e = estimate({ client_region: 'united_states', items: [
     { item_id: 'booking_website', quantity: 1 },
     { item_id: 'website_care_plus', quantity: 1 },
   ] });
   assert.equal(e.currency, 'USD');
-  assert.equal(e.one_time, '$5,000 to $12,000');
-  assert.equal(e.monthly, '$200 to $400 a month');
+  assert.equal(e.one_time, '$2,000 to $5,000');
+  assert.equal(e.monthly, '$150 to $300 a month');
 });
 
 test('staffing is offered overseas only, in dollars', () => {
@@ -72,8 +74,15 @@ test('system care is a share of the system build, with a minimum', () => {
   // 1.25% of $3,350 = $42 -> minimum $125; 1.75% of $7,500 = $131 -> $125 (tidied to $25)
   assert.equal(e.monthly, '$125 to $125 a month');
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'pos_inventory', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
-  // 1.25% of $12,000 = $150 -> minimum $400; 1.75% of $30,000 = $525 -> $550 (tidied to $50)
-  assert.equal(us.monthly, '$400 to $550 a month');
+  // 1.25% of $12,000 = $150 -> minimum $300; 1.5% of $25,000 = $375 -> $400 (tidied to $50)
+  assert.equal(us.monthly, '$300 to $400 a month');
+  // Above the minimum, Philippine care keeps 1.25% to 1.75%; overseas is 1.25% to 1.5%.
+  const phBig = estimate({ client_region: 'philippines', items: [{ item_id: 'multi_module_system', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
+  // 1.25% of $11,650 = $146 -> $150; 1.75% of $25,000 = $438 -> $450 (tidied to $25)
+  assert.equal(phBig.monthly, '$150 to $450 a month');
+  const usBig = estimate({ client_region: 'united_states', items: [{ item_id: 'multi_module_system', quantity: 1 }, { item_id: 'system_care', quantity: 1 }] });
+  // 1.25% of $30,000 = $375 -> $400; 1.5% of $70,000 = $1,050 (tidied to $50)
+  assert.equal(usBig.monthly, '$400 to $1,050 a month');
   const alone = estimate({ client_region: 'philippines', items: [{ item_id: 'system_care', quantity: 1 }] });
   assert.equal(alone.ok, false);
 });
