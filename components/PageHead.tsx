@@ -9,15 +9,17 @@ type Props = {
   ogTitle?: string;
   ogDescription?: string;
   jsonLd?: object[];
+  noindex?: boolean;
 };
 
 // Title, search description and link-preview tags for one page.
-export default function PageHead({ title, description, path, ogTitle, ogDescription, jsonLd = [] }: Props) {
+export default function PageHead({ title, description, path, ogTitle, ogDescription, jsonLd = [], noindex = false }: Props) {
   const url = SITE + path;
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
+      {noindex && <meta name="robots" content="noindex" />}
       <link rel="canonical" href={url} />
       <meta property="og:title" content={ogTitle || title} />
       <meta property="og:description" content={ogDescription || description} />

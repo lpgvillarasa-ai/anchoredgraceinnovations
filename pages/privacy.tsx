@@ -1,14 +1,14 @@
 import type { GetStaticProps } from 'next';
 import type { ReactNode } from 'react';
 import PageHead from '@/components/PageHead';
-import Placeholder from '@/components/Placeholder';
 import SubpageShell from '@/components/SubpageShell';
 import { readFragments, type Fragments } from '@/lib/legacy';
 
 export const getStaticProps: GetStaticProps<{ f: Fragments }> = () => ({ props: { f: readFragments('shared') } });
 
-// A plain starter policy describing what the site actually does today.
-// Everything marked [REVIEW WITH LEE] needs Lee's check before launch.
+// A plain policy describing what the site actually does today (Lee approved
+// publishing it on 2026-11-02). Update it whenever the site starts collecting
+// something new.
 function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="tw:border-t tw:border-ink/10 tw:py-8">
@@ -30,8 +30,7 @@ export default function Privacy({ f }: { f: Fragments }) {
         <article className="tw:mx-auto tw:max-w-[760px]">
           <div className="kicker">PRIVACY</div>
           <h1 className="h2 tw:mb-4 tw:mt-3">Privacy policy</h1>
-          <Placeholder text="[REVIEW WITH LEE] This is a plain starter policy written from how the site works today. It is not legal advice: please have it checked before relying on it." />
-          <p className="tw:mb-8 tw:mt-5 tw:text-[15px] tw:text-[#5b5f66]">Last updated: [DATE]</p>
+          <p className="tw:mb-8 tw:mt-5 tw:text-[15px] tw:text-[#5b5f66]">Last updated: 2 November 2026</p>
 
           <Block title="Who we are">
             <p>Anchored Grace Innovations is a small studio based in Cebu, Philippines, run by Lee Villarasa. For anything about your information, email <a className="tw:text-gold-ink tw:underline" href="mailto:lee@anchoredgraceinnovations.com">lee@anchoredgraceinnovations.com</a>.</p>
@@ -40,7 +39,7 @@ export default function Privacy({ f }: { f: Fragments }) {
           <Block title="The contact form">
             <p>When you leave a note, we keep your name, your email and what you wrote. It is saved in our own private storage on Cloudflare, which only Lee can open, and we use it only to reply to you. We do not sell it or add you to a mailing list.</p>
             <p>To stop automated spam, we also keep a scrambled fingerprint of your internet address (not the address itself) for one day, which limits how many notes can be sent.</p>
-            <Placeholder text="[REVIEW WITH LEE: how long notes are kept before they are deleted]" />
+            <p>We keep notes only as long as we need them to reply to you, and we delete yours any time you ask by email.</p>
           </Block>
 
           <Block title="The AI estimate chat">
@@ -50,13 +49,13 @@ export default function Privacy({ f }: { f: Fragments }) {
           </Block>
 
           <Block title="Services that help run the site">
-            <p>The site is hosted on Cloudflare. Fonts load from Google Fonts. Booking a call opens Calendly, and our demos and concept sites open on their own pages. Each of these services handles the technical details your browser sends them under its own privacy policy.</p>
-            <Placeholder text="[REVIEW WITH LEE: confirm whether Cloudflare Web Analytics is switched on for this site, and whether any cookies are set]" />
+            <p>The site is hosted on Cloudflare, and our fonts are served from our own site. Booking a call opens Calendly, and our demos and concept sites open on their own pages. Each of these services handles the technical details your browser sends them under its own privacy policy.</p>
+            <p>We count visits with Cloudflare Web Analytics, which does not use cookies and does not follow you to other sites. This site does not set cookies of its own and uses no advertising trackers.</p>
           </Block>
 
           <Block title="Your choices">
             <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it, by emailing Lee. We will answer within a reasonable time.</p>
-            <Placeholder text="[REVIEW WITH LEE: wording for your rights under the Philippine Data Privacy Act (RA 10173), and for visitors from other countries]" />
+            <p>If you are in the Philippines, these are your rights under the Data Privacy Act of 2012 (Republic Act 10173), and you can also raise a concern with the National Privacy Commission. Visitors from other countries can make the same requests the same way.</p>
           </Block>
         </article>
       </div>

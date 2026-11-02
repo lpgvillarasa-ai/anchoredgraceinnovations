@@ -4,7 +4,7 @@ import { useState } from 'react';
 // The same questions are given to search engines as FAQ data (see FAQ_JSON_LD).
 export const FAQS: [string, string][] = [
   ['How much does a website cost?', 'It depends on what you need. Most small business sites start at ₱35,000 in the Philippines, or $4,000 for businesses overseas. You get a fixed quote after a free 30-minute call, and the estimate assistant can give you a ballpark right now.'],
-  ['How long does it take?', 'A marketing website usually takes [X] weeks. Apps and systems take longer, and you get the timeline in writing before we start.'],
+  ['How long does it take?', 'A marketing website usually takes 3 to 6 weeks. Apps and systems take longer, and you get the timeline in writing before we start.'],
   ['Do I own the website?', 'Yes. Your domain, your content and your data are yours. If you ever leave, you take everything with you.'],
   ['You are a new studio. Why should I trust you?', 'Fair question. Try the live demos on this page, meet Lee on a call, and only pay against a fixed quote you approve first.'],
   ['Can you work with my existing website or system?', 'Often, yes. We can redesign what you have, add AI to it, or connect it to new tools. We will tell you honestly on the call.'],

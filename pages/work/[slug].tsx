@@ -18,6 +18,10 @@ export const getStaticProps: GetStaticProps<Props> = ({ params }) => {
   return { props: { study, f: readFragments('shared') } };
 };
 
+// Not linked from the site and kept out of search results (noindex, not in the
+// sitemap) until Lee sends the real text for these three sections. When he does,
+// fill them in, drop `noindex`, add the pages back to public/sitemap.xml and put
+// `story: '/work/<slug>'` back on the project in public/js/projects.js.
 const SECTIONS: [string, string][] = [
   ['The problem', '[PROBLEM: 2 to 3 sentences]'],
   ['What we built', '[WHAT WE BUILT: 3 to 5 short points]'],
@@ -31,6 +35,7 @@ export default function CaseStudyPage({ study, f }: Props) {
         title={`${study.name}: case study | Anchored Grace Innovations`}
         description={`How Anchored Grace Innovations built ${study.name}. ${study.line}`}
         path={`/work/${study.slug}`}
+        noindex
       />
       <section className="tw:px-[var(--gutter)] tw:pb-16 tw:pt-36 tw:sm:pt-44">
         <div className="tw:mx-auto tw:max-w-[1080px]">

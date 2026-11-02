@@ -101,7 +101,7 @@ export function PosTile({ className }: { className?: string }) {
 // ---------- 3. AI front desk (canned answers only: no AI is called here) ----------
 const QA: [string, string][] = [
   ['Are you open Sunday?', 'Yes. We are open Sundays from 10:00 AM to 4:00 PM. Would you like to book a time?'],
-  ['How much is a facial?', 'Our signature facial is [PRICE]. I can book you in for this week if you like.'],
+  ['How much is a facial?', 'Prices depend on the treatment, and I can send you our full menu. Would you like me to book you in for this week?'],
   ['Is there parking?', 'Yes, there is free parking for clients right in front of the clinic.'],
 ];
 

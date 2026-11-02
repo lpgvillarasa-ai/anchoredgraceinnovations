@@ -36,20 +36,20 @@
 window.AGI_PROJECTS = [
   // ---------- Live client sites ----------
   {
-    name: 'Skin Delight Cebu', story: '/work/skin-delight-cebu', group: 'live', kind: 'Website',
+    name: 'Skin Delight Cebu', group: 'live', kind: 'Website',
     line: 'A premium site for an aesthetic clinic: full price list, client results and online booking.',
     tags: ['Healthcare', 'Booking', 'Cebu'], url: 'https://skindelightcebu.com', img: 'media/work/skin-delight.jpg', show: true,
     features: ['Full price list for every clinic and salon service', 'Real client results, with posters you tap to enlarge', 'Dedicated pages for the clinic\'s key treatments', 'Messenger, call and get-directions buttons beside a map', 'Clients pick a service, day and free time online'],
     connected: 'The Book online button opens the clinic\'s own booking page, and each request lands in the clinic\'s staff system to confirm.',
   },
   {
-    name: 'Coach Jasmin Rough', story: '/work/coach-jasmin-rough', group: 'live', kind: 'Website',
+    name: 'Coach Jasmin Rough', group: 'live', kind: 'Website',
     line: "A women's fitness coaching site: programs, results and consultation requests.",
     tags: ['Fitness', 'Personal brand'], url: 'https://jasminroughcoaching.com', img: 'media/work/jasmin-rough.jpg', show: true,
     features: ['Her story told in chapters, from first workout to the stage', 'Competition results and coaching certificates on show', 'Free consult request form sent straight to the coach', 'Coaching programs, FAQ and a link-in-bio page'],
   },
   {
-    name: 'CK 12th Anniversary', story: '/work/ck-12th-anniversary', group: 'live', kind: 'Website + app',
+    name: 'CK 12th Anniversary', group: 'live', kind: 'Website + app',
     line: "Event website with tickets, door check-in and an admin app for a church's anniversary celebration.",
     tags: ['Events', 'Ticketing', 'Church'], url: 'https://ckworldharvest.org', img: 'media/work/ck12.jpg', show: true,
     features: ['Event countdown, details, history timeline and FAQ', 'Every printed ticket carries its own QR code', 'Guests scan it, register, and save a phone ticket', 'Door scanner by USB or phone camera, works offline', 'Raffle draws only checked-in guests, shown full screen'],
