@@ -1,7 +1,7 @@
 // A thin strip under the hero naming the tools we build with (plain text, no logos).
 // On phones the names glide slowly sideways; with reduced motion they sit still and wrap.
 // Tablets show the label above one centred row; wide screens put both on one line.
-const TOOLS = ['Next.js', 'Supabase', 'Vercel', 'Tailwind', 'Claude AI', 'Stripe'];
+const TOOLS = ['Next.js', 'Supabase', 'Vercel', 'Tailwind', 'Claude AI'];
 
 function Names({ hidden = false }: { hidden?: boolean }) {
   return (

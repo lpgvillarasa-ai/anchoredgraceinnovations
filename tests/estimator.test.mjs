@@ -25,17 +25,16 @@ test('US client gets dollars, and one-time and monthly are kept apart', () => {
   assert.equal(e.monthly, '$200 to $400 a month');
 });
 
-test('staffing is quoted in dollars overseas, and on a call for Philippine businesses', () => {
+test('staffing is offered overseas only, in dollars', () => {
   const ph = estimate({ client_region: 'philippines', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
-  assert.equal(ph.ok, true);
-  assert.equal(ph.monthly, null);
-  assert.equal(ph.lines[0].range, 'Price confirmed on a free discovery call');
-  assert.equal(ph.lines[0].billing, 'call');
-  assert.doesNotMatch(JSON.stringify(ph), /[₱$]\s?\d/, 'no Philippine staffing price');
+  assert.equal(ph.ok, false);
+  assert.match(ph.problems.join(' '), /not offered in the Philippines/);
   const phMixed = estimate({ client_region: 'philippines', items: [{ item_id: 'business_website', quantity: 1 }, { item_id: 'staff_data_entry', quantity: 1 }] });
+  assert.equal(phMixed.ok, true);
   assert.equal(phMixed.one_time, '$600 to $1,500');
   assert.equal(phMixed.monthly, null);
-  assert.equal(phMixed.lines.length, 2);
+  assert.equal(phMixed.lines.length, 1);
+  assert.match(phMixed.problems.join(' '), /not offered in the Philippines/);
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
   assert.equal(other.ok, true);
   assert.equal(other.monthly, '$1,599 to $1,999 a month');
@@ -45,11 +44,11 @@ test('staffing is quoted in dollars overseas, and on a call for Philippine busin
   assert.equal(entry.monthly, '$1,499 to $1,799 a month');
 });
 
-test('no staffing role starts below $1,499 a month, and Philippine staffing is priced on a call', () => {
+test('no staffing role starts below $1,499 a month, and none is offered in the Philippines', () => {
   for (const [id, it] of Object.entries(ITEMS)) {
     if (it.group === 'Staff') {
       assert.ok(it.usd[0] >= 1499, `${id} starts at ${it.usd[0]}`);
-      assert.equal(it.ph, 'call', `${id} must be priced on a call in the Philippines`);
+      assert.equal(it.ph, undefined, `${id} must not be offered in the Philippines`);
     }
   }
 });
