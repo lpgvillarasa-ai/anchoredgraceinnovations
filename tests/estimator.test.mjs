@@ -39,11 +39,11 @@ test('staffing is offered overseas only, in dollars', () => {
   assert.match(phMixed.problems.join(' '), /not offered in the Philippines/);
   const other = estimate({ client_region: 'other_international', items: [{ item_id: 'staff_admin', quantity: 1 }] });
   assert.equal(other.ok, true);
-  assert.equal(other.monthly, '$1,599 to $1,999 a month');
+  assert.equal(other.monthly, '$1,599 to $1,899 a month');
   const us = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_virtual_assistant', quantity: 1 }] });
-  assert.equal(us.monthly, '$1,699 to $2,199 a month');
+  assert.equal(us.monthly, '$1,699 to $1,999 a month');
   const entry = estimate({ client_region: 'united_states', items: [{ item_id: 'staff_data_entry', quantity: 1 }] });
-  assert.equal(entry.monthly, '$1,499 to $1,799 a month');
+  assert.equal(entry.monthly, '$1,499 to $1,699 a month');
 });
 
 test('no staffing role starts below $1,499 a month, and none is offered in the Philippines', () => {

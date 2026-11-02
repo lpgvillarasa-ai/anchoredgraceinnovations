@@ -47,14 +47,15 @@ export const ITEMS = {
   ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', ph: [1000, 2000], usd: [1500, 3000] },
 
   // ----- Staff (full time, priced in steps by role, Lee 2026-10-31) -----
-  // Overseas only: from $1,499, working the client's hours (every role up $300,
-  // Lee 2026-10-31). Not offered to businesses in the Philippines (Lee 2026-11-02).
-  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1699, 2199] },
-  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [2099, 2699] },
-  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1799, 2399] },
-  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1599, 1999] },
-  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1499, 1799] },
-  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1599, 2099] },
+  // Overseas only: from $1,499, working the client's hours (Lee 2026-10-31).
+  // Not offered to businesses in the Philippines (Lee 2026-11-02). Tops lowered
+  // to what managed Philippine staffing agencies charge, starts kept (Lee 2026-11-02).
+  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1699, 1999] },
+  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [2099, 2499] },
+  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1799, 2299] },
+  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1599, 1899] },
+  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1499, 1699] },
+  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1599, 1899] },
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', ph: [25, 75], usd: [60, 150] },
