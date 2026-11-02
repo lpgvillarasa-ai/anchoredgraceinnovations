@@ -1,0 +1,40 @@
+/* Order of the style layers: Tailwind's design values, then the site's original
+   stylesheet (legacy.css, unchanged), then Tailwind utilities, so new sections can
+   use utilities without the old styles getting in the way. Tailwind's own reset
+   ("preflight") is left out on purpose: legacy.css already sets the base look. */
+@layer theme, legacy, utilities;
+
+/* Geist and Geist Mono, served from our own site (public/fonts, SIL Open Font
+   License, see public/fonts/LICENSE.txt) instead of Google Fonts, so the first
+   paint does not wait on another company's server. */
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "./legacy.css" layer(legacy);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
+/* Brand values, usable as Tailwind classes (tw:bg-cream, tw:text-gold-ink, tw:font-mono ...) */
+@theme {
+  --color-cream: #F4F1EB;
+  --color-paper: #FAF8F4;
+  --color-ink: #0B0E13;
+  --color-deep: #07090C;
+  --color-gold: #D8C39B;
+  --color-gold-ink: #7A5F2E;
+  --color-body: #2A2D33;
+  --color-sand: #EFE9DD;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}

@@ -1,4 +1,13 @@
 (() => {
+  // Anything already on screen when this script runs shows at once, with no
+  // animation (.instant). Done before .js is added, so nothing visible blinks out.
+  const inView = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+  };
+  const showNow = (el) => el.classList.add('in', 'instant');
+  document.querySelectorAll('[data-reveal]').forEach((el) => { if (inView(el)) showNow(el); });
+
   // Marks that JS is available; [data-reveal] elements are only hidden under .js
   document.documentElement.classList.add('js');
 
@@ -9,8 +18,10 @@
   // Hero headline word-mask rise — must run BEFORE the reveal observer registers.
   // Words stay real text nodes (whitespace preserved) so selection, copy and
   // screen readers are unaffected. data-reveal is stripped so agiUp can't double-fire.
+  // Skipped when the headline is already on screen (the usual case, since this script
+  // now starts after the page is shown): re-animating visible text makes it blink out.
   const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle && !REDUCED) {
+  if (heroTitle && !REDUCED && !heroTitle.classList.contains('instant')) {
     const parts = heroTitle.textContent.split(/(\s+)/);
     heroTitle.textContent = '';
     let wordIndex = 0;
@@ -33,7 +44,8 @@
     heroTitle.style.removeProperty('--d');
   }
 
-  // Scroll reveal — elements above the fold intersect immediately and animate on load
+  // Scroll reveal: a short entrance (0.35s) that starts when about 10% of an
+  // element shows, a little before it reaches the screen.
   const reveals = document.querySelectorAll('[data-reveal]');
   if (hasIO) {
     const io = new IntersectionObserver((entries) => {
@@ -43,21 +55,34 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach((el) => io.observe(el));
-    // Failsafe: if the observer misfires, force only elements currently in the
-    // viewport. Off-screen elements stay observed so their reveal still plays
-    // on scroll instead of firing invisibly at t=2.4s.
+    }, { threshold: 0.1, rootMargin: '0px 0px 10% 0px' });
+    reveals.forEach((el) => { if (!el.classList.contains('in')) io.observe(el); });
+
+    // Menu jumps: the section you jump to (and anything on screen when you land)
+    // shows at once, so it never looks empty while it would still be fading in.
+    const revealSection = (hash) => {
+      const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+      const target = id && document.getElementById(id);
+      if (!target) return;
+      const group = target.matches('[data-reveal]') ? [target] : [];
+      group.concat(Array.from(target.querySelectorAll('[data-reveal]'))).forEach((el) => {
+        if (!el.classList.contains('in')) { showNow(el); io.unobserve(el); }
+      });
+    };
+    document.addEventListener('click', (e) => {
+      const a = e.target instanceof Element && e.target.closest('a[href*="#"]');
+      if (!a || a.origin !== location.origin || a.pathname !== location.pathname) return;
+      revealSection(a.hash);
+    });
+    window.addEventListener('hashchange', () => revealSection(location.hash));
+    if (location.hash) revealSection(location.hash);
+
+    // Failsafe: if the observer misfires, show whatever is on screen.
     setTimeout(() => {
       reveals.forEach((el) => {
-        if (el.classList.contains('in')) return;
-        const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) {
-          el.classList.add('in');
-          io.unobserve(el);
-        }
+        if (!el.classList.contains('in') && inView(el)) { el.classList.add('in'); io.unobserve(el); }
       });
-    }, 2400);
+    }, 1200);
     // Keyboard users: never leave focus inside a still-hidden reveal group
     document.addEventListener('focusin', (e) => {
       const host = e.target instanceof Element && e.target.closest('[data-reveal]');
@@ -80,20 +105,24 @@
     // Dark glass while the header floats over a dark section.
     const darkZones = document.querySelectorAll('[data-nav-dark]');
     let scrollQueued = false;
+    // All measuring happens first, then all changes: measuring after a change would
+    // force the browser to lay the page out again on every scroll step.
+    let lastProgress = '';
     const onScrollFrame = () => {
       scrollQueued = false;
       const y = window.scrollY || 0;
-      nav.classList.toggle('scrolled', y > 24);
       const probe = 40;
       let onDark = false;
       darkZones.forEach((z) => {
-        if (z.hidden) return;
+        if (onDark || z.hidden) return;
         const r = z.getBoundingClientRect();
         if (r.top <= probe && r.bottom >= probe) onDark = true;
       });
-      nav.classList.toggle('on-dark', onDark);
       const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      progress.style.transform = 'scaleX(' + Math.min(1, y / max) + ')';
+      nav.classList.toggle('scrolled', y > 24);
+      nav.classList.toggle('on-dark', onDark);
+      const at = Math.min(1, y / max).toFixed(3);
+      if (at !== lastProgress) { lastProgress = at; progress.style.transform = 'scaleX(' + at + ')'; }
     };
     const queue = () => {
       if (!scrollQueued) {
@@ -233,7 +262,7 @@
           if (link) link.classList.add('active');
         });
       }, { rootMargin: '-45% 0px -50% 0px' });
-      ['services', 'talent', 'process', 'pricing'].forEach((id) => {
+      ['services', 'work', 'talent', 'process', 'pricing'].forEach((id) => {
         const section = document.getElementById(id);
         if (section) spy.observe(section);
       });

@@ -268,12 +268,21 @@ body {
 .btn-gold.btn-xl { box-shadow: 0 16px 34px -14px rgba(216, 195, 155, 0.7); }
 .btn-gold.btn-xl:hover { box-shadow: 0 22px 44px -14px rgba(216, 195, 155, 0.8); background: #e6d5b2; }
 .btn-ghost {
+  /* button elements get a grey browser background unless told otherwise */
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
   border: 1.5px solid rgba(244, 241, 235, 0.35);
   color: var(--cream-text);
   padding: 16px 28px;
   transition: border-color .25s, background .25s;
 }
-.btn-ghost:hover { border-color: rgba(244, 241, 235, 0.7); background: rgba(244, 241, 235, 0.06); }
+.btn-ghost:hover { border-color: rgba(244, 241, 235, 0.7); background: rgba(244, 241, 235, 0.1); color: var(--cream-text); }
+.btn-ghost:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.has-estimator .btn.est-only { justify-content: center; align-items: center; }
 
 /* ============ Nav ============ */
 /* The header floats: a rounded glass bar a little below the top edge. Only the
@@ -464,7 +473,7 @@ body {
   flex-shrink: 0;
 }
 .float-card-title { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; color: var(--ink); line-height: 1.1; }
-.float-card-sub { font-size: 11px; color: #7a746a; margin-top: 2px; }
+.float-card-sub { font-size: 11px; color: #5f5a52; margin-top: 2px; }
 
 /* ============ Trust strip ============ */
 .trust { border-top: 1px solid rgba(11, 14, 19, 0.08); border-bottom: 1px solid rgba(11, 14, 19, 0.08); background: var(--cream-band); }
@@ -480,7 +489,7 @@ body {
 /* ============ Shared section bits ============ */
 .section { padding: clamp(88px, 10vw, 128px) var(--gutter); scroll-margin-top: 90px; }
 .section-bottom { padding: 0 var(--gutter) clamp(88px, 10vw, 128px); scroll-margin-top: 90px; }
-.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: var(--gold-deep); margin-bottom: 16px; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: #7A5F2E; margin-bottom: 16px; }
 .kicker.gold { color: var(--gold); }
 .h2 {
   font-family: var(--font-display);
@@ -740,7 +749,7 @@ body {
 .btn-plan { display: block; text-align: center; padding: 13px; font-size: 14.5px; }
 .btn-gold.btn-plan { transition: background .2s, transform .25s var(--ease-out); box-shadow: none; }
 .btn-gold.btn-plan:hover { background: #e6d5b2; transform: translateY(-1px); box-shadow: none; }
-.pricing-note { font-family: var(--font-mono); font-size: 11px; color: #9a9284; margin: 22px 0 0; }
+.pricing-note { font-family: var(--font-mono); font-size: 11px; color: #6b655b; margin: 22px 0 0; }
 
 /* ============ Contact / CTA ============ */
 .contact {
@@ -980,7 +989,7 @@ body {
 .work-dialog .work-frame { margin: 0; }
 .work-dialog .work-shot { aspect-ratio: 16 / 10; }
 .work-dialog-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 22px 22px 26px; }
-.work-dialog-kicker { font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gold-deep); }
+.work-dialog-kicker { font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
 .work-dialog-title { font: 600 clamp(24px, 2.6vw, 32px)/1.15 var(--font-display); letter-spacing: -0.02em; margin: 0; }
 .work-dialog-line { font-size: 16px; line-height: 1.6; color: #50545b; margin: 0; }
 .work-dialog-go { margin-top: 8px; }
@@ -1274,3 +1283,68 @@ html.work-dialog-open { overflow: hidden; }
 
 /* Second price list on the staffing card: peso prices for businesses in the Philippines */
 .role-prices-title { margin: 6px 0 0; font-size: 14px; color: rgba(244, 241, 235, 0.72); }
+
+/* ============ Quick reveals ============
+   Entrances are short (0.35s) and barely staggered, so a section reached from the
+   menu never looks empty. Content that is already on screen, or that you jump to,
+   gets .instant from js/main.js and shows at once with no animation. */
+@keyframes agiUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.js [data-reveal].in { animation-duration: .35s; animation-delay: calc(var(--d, 0s) * .3); }
+.hero-title .wi { animation-duration: .38s; animation-delay: calc(.05s + var(--wi) * 25ms); }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > * { animation-duration: .35s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(2) { animation-delay: .04s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(3) { animation-delay: .08s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(4) { animation-delay: .12s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(5) { animation-delay: .16s; }
+.js :is(.pillars, .roles, .plans, .testimonials, .ai-list)[data-reveal].in > :nth-child(6) { animation-delay: .2s; }
+.js .mission[data-reveal].in .value { animation-duration: .35s; }
+.js .mission[data-reveal].in .value:nth-child(1) { animation-delay: .04s; }
+.js .mission[data-reveal].in .value:nth-child(2) { animation-delay: .08s; }
+.js .mission[data-reveal].in .value:nth-child(3) { animation-delay: .12s; }
+.js .mission[data-reveal].in .value:nth-child(4) { animation-delay: .16s; }
+.js .steps[data-reveal].in .steps-line { transition: transform .38s var(--ease-out); }
+.js .steps[data-reveal].in .step,
+.js .steps[data-reveal].in .step-num { animation-duration: .35s; }
+.js .steps[data-reveal].in .step:nth-child(2),
+.js .steps[data-reveal].in .step:nth-child(2) .step-num { animation-delay: 0s; }
+.js .steps[data-reveal].in .step:nth-child(3),
+.js .steps[data-reveal].in .step:nth-child(3) .step-num { animation-delay: .06s; }
+.js .steps[data-reveal].in .step:nth-child(4),
+.js .steps[data-reveal].in .step:nth-child(4) .step-num { animation-delay: .12s; }
+.js .steps[data-reveal].in .step:nth-child(5),
+.js .steps[data-reveal].in .step:nth-child(5) .step-num { animation-delay: .18s; }
+
+.js [data-reveal].instant,
+.js [data-reveal].instant > *,
+.js [data-reveal].instant .value,
+.js [data-reveal].instant .step,
+.js [data-reveal].instant .step-num { opacity: 1 !important; animation: none !important; }
+.js [data-reveal].instant .steps-line,
+.js [data-reveal].instant .kicker::before { transform: none !important; transition: none !important; }
+
+/* Contact section with the note form beside it (wide screens): text aligns left */
+@media (min-width: 1025px) {
+  .contact-split { text-align: left; }
+  .contact-split .contact-inner { margin: 0; }
+  .contact-split .contact-sub { margin-left: 0; }
+  .contact-split .contact-ctas { justify-content: flex-start; }
+}
+
+/* The founder link in the footer text is underlined, not only coloured */
+.footer-brand p a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Project preview: what's inside, how it connects, and its buttons */
+.work-dialog-subhead { margin-top: 6px; font: 400 11px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
+.work-feature-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.work-feature-list li { position: relative; padding-left: 25px; font-size: 14.5px; line-height: 1.45; color: var(--body); }
+.work-feature-list li::before {
+  content: ""; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2 5 8.5l4.5-5' fill='none' stroke='%23D8C39B' stroke-width='1.8'/%3E%3C/svg%3E") center / 10px no-repeat;
+}
+.work-dialog-connected { margin: 2px 0 0; padding: 11px 13px; border-radius: 12px; background: rgba(216, 195, 155, 0.2); border: 1px solid rgba(122, 95, 46, 0.25); font-size: 13.5px; line-height: 1.5; color: var(--body); }
+.work-dialog-connected b { display: block; margin-bottom: 3px; font: 500 10.5px/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: #7A5F2E; }
+.work-dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.work-dialog-actions .work-dialog-go { margin-top: 0; }

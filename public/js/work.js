@@ -79,7 +79,7 @@
     body.appendChild(tags);
     body.appendChild(el('span', 'work-cta', 'View project →'));
     c.appendChild(body);
-    // One button over the whole card opens the large preview.
+    // One button over the whole card opens the large preview with what's inside.
     var hit = el('button', 'work-hit');
     hit.type = 'button';
     hit.setAttribute('aria-haspopup', 'dialog');
@@ -264,12 +264,34 @@
       var tags = el('div', 'work-tags');
       (p.tags || []).slice(0, 6).forEach(function (t) { tags.appendChild(el('span', 'work-tag', t)); });
       body.appendChild(tags);
-      var go = el('a', 'btn btn-dark btn-lg work-dialog-go', ctaText(p, url) + ' ');
-      go.appendChild(el('span', 'btn-arrow', '→')).setAttribute('aria-hidden', 'true');
+      // What's inside: the project's main features, then how it connects to our other systems.
+      if (p.features && p.features.length) {
+        body.appendChild(el('div', 'work-dialog-subhead', 'What\u2019s inside'));
+        var feats = el('ul', 'work-feature-list');
+        p.features.slice(0, 6).forEach(function (f) { feats.appendChild(el('li', null, f)); });
+        body.appendChild(feats);
+      }
+      if (p.connected) {
+        var link = el('p', 'work-dialog-connected');
+        link.appendChild(el('b', null, 'Connected'));
+        link.appendChild(document.createTextNode(p.connected));
+        body.appendChild(link);
+      }
+      var actions = el('div', 'work-dialog-actions');
+      var story = /^\/work\/[a-z0-9-]+$/.test(p.story || '') ? p.story : null;
+      if (story) {
+        var read = el('a', 'btn btn-dark btn-lg work-dialog-go', 'Read the story ');
+        read.appendChild(el('span', 'btn-arrow', '→')).setAttribute('aria-hidden', 'true');
+        read.href = story;
+        actions.appendChild(read);
+      }
+      var go = el('a', 'btn ' + (story ? 'btn-outline' : 'btn-dark') + ' btn-lg work-dialog-go', ctaText(p, url) + ' ');
+      go.appendChild(el('span', 'btn-arrow', story ? '↗' : '→')).setAttribute('aria-hidden', 'true');
       go.href = url || 'https://calendly.com/lpg-villarasa/30min';
       go.target = '_blank';
       go.rel = 'noopener';
-      body.appendChild(go);
+      actions.appendChild(go);
+      body.appendChild(actions);
       if (!url) body.appendChild(el('p', 'work-dialog-note', p.group === 'system' ? 'A private client system. We never show real client data: this preview uses sample data only, with names and numbers blurred.' : 'We walk you through it on a short call.'));
       inner.appendChild(close);
       inner.appendChild(big);
@@ -292,7 +314,8 @@
     dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
     grid.addEventListener('click', function (e) {
       var hit = e.target.closest && e.target.closest('.work-hit');
-      if (!hit || justDragged) return;
+      if (!hit) return;
+      if (justDragged) { e.preventDefault(); return; }
       openPreview(hit.closest('.work-card'));
     });
   }
