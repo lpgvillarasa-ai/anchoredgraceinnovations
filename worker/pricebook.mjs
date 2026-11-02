@@ -7,38 +7,44 @@
 // prices are the approved peso prices converted at about ₱60 per $1 and rounded
 // (to $50 from $500 up, to $25 below). A missing market means "not offered
 // there".
+//
+// The `usd` (overseas) prices follow what experienced, top-rated freelancers and
+// small offshore agencies charge on Upwork and Fiverr and in published 2025-2026
+// cost guides (Lee 2026-11-02: "a website is around $1,500 on the market"); a
+// business website now starts at $1,500. Staffing prices are Lee's own and are
+// not part of that check.
 // billing: 'once' (one-time project), 'month' (every month), 'each' (per unit).
 
-export const PRICE_BOOK_VERSION = '2026-11-02 draft 7 (no staffing in the Philippines)';
+export const PRICE_BOOK_VERSION = '2026-11-02 draft 8 (overseas prices set to the freelance market)';
 
 export const ITEMS = {
   // ----- Build -----
   // Philippine website prices set to the Cebu market (Lee 2026-10-31): a business
   // website from ₱35,000 (now $600), and a landing page always below that.
-  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', ph: [250, 425], usd: [1200, 2500], weeks: '1-2' },
-  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', ph: [600, 1500], usd: [4000, 9000], weeks: '3-6' },
-  premium_website: { group: 'Build', label: 'Premium / animated website', billing: 'once', ph: [2500, 5000], usd: [10000, 25000], weeks: '6-12' },
-  booking_website: { group: 'Build', label: 'Website with online booking', billing: 'once', ph: [1350, 3000], usd: [5000, 12000], weeks: '4-8' },
-  online_shop: { group: 'Build', label: 'Online shop (e-commerce)', billing: 'once', ph: [1650, 3650], usd: [6000, 15000], weeks: '4-10' },
-  booking_system: { group: 'Build', label: 'Custom booking system', billing: 'once', ph: [2500, 5850], usd: [8000, 20000], weeks: '6-10', system: true },
-  pos_inventory: { group: 'Build', label: 'POS and inventory system', billing: 'once', ph: [3350, 7500], usd: [12000, 30000], weeks: '8-12', system: true },
-  hr_payroll: { group: 'Build', label: 'HR, attendance and payroll system', billing: 'once', ph: [4150, 10000], usd: [15000, 35000], weeks: '10-14', system: true },
-  crm: { group: 'Build', label: 'CRM (client and sales tracker)', billing: 'once', ph: [2500, 6650], usd: [10000, 25000], weeks: '6-12', system: true },
-  client_portal: { group: 'Build', label: 'Client portal', billing: 'once', ph: [2500, 6650], usd: [10000, 25000], weeks: '8-12', system: true },
-  dashboard: { group: 'Build', label: 'Dashboard and reports', billing: 'once', ph: [1350, 4150], usd: [6000, 18000], weeks: '3-8', system: true },
-  multi_module_system: { group: 'Build', label: 'Multi-module business system', billing: 'once', ph: [11650, 25000], usd: [35000, 80000], weeks: '16-26', system: true },
+  landing_page: { group: 'Build', label: 'One-page landing page', billing: 'once', ph: [250, 425], usd: [500, 1200], weeks: '1-2' },
+  business_website: { group: 'Build', label: 'Business website (5 to 10 pages)', billing: 'once', ph: [600, 1500], usd: [1500, 4000], weeks: '3-6' },
+  premium_website: { group: 'Build', label: 'Premium / animated website', billing: 'once', ph: [2500, 5000], usd: [5000, 12000], weeks: '6-12' },
+  booking_website: { group: 'Build', label: 'Website with online booking', billing: 'once', ph: [1350, 3000], usd: [2000, 5000], weeks: '4-8' },
+  online_shop: { group: 'Build', label: 'Online shop (e-commerce)', billing: 'once', ph: [1650, 3650], usd: [3000, 8000], weeks: '4-10' },
+  booking_system: { group: 'Build', label: 'Custom booking system', billing: 'once', ph: [2500, 5850], usd: [8000, 16000], weeks: '6-10', system: true },
+  pos_inventory: { group: 'Build', label: 'POS and inventory system', billing: 'once', ph: [3350, 7500], usd: [12000, 25000], weeks: '8-12', system: true },
+  hr_payroll: { group: 'Build', label: 'HR, attendance and payroll system', billing: 'once', ph: [4150, 10000], usd: [15000, 30000], weeks: '10-14', system: true },
+  crm: { group: 'Build', label: 'CRM (client and sales tracker)', billing: 'once', ph: [2500, 6650], usd: [10000, 20000], weeks: '6-12', system: true },
+  client_portal: { group: 'Build', label: 'Client portal', billing: 'once', ph: [2500, 6650], usd: [10000, 20000], weeks: '8-12', system: true },
+  dashboard: { group: 'Build', label: 'Dashboard and reports', billing: 'once', ph: [1350, 4150], usd: [5000, 12000], weeks: '3-8', system: true },
+  multi_module_system: { group: 'Build', label: 'Multi-module business system', billing: 'once', ph: [11650, 25000], usd: [30000, 70000], weeks: '16-26', system: true },
 
   // ----- Automate -----
-  ai_chat_assistant_setup: { group: 'Automate', label: 'AI chat assistant for your website (setup)', billing: 'once', ph: [325, 750], usd: [1000, 3500], weeks: '1-3' },
-  ai_chat_assistant_monthly: { group: 'Automate', label: 'AI chat assistant (monthly running and care)', billing: 'month', ph: [50, 125], usd: [150, 400] },
-  ai_feature: { group: 'Automate', label: 'AI added to an existing system (one feature)', billing: 'once', ph: [1350, 4150], usd: [5000, 15000], weeks: '2-6' },
-  automation_single: { group: 'Automate', label: 'Workflow automation (single workflow)', billing: 'once', ph: [250, 600], usd: [600, 1500], weeks: '0.5-2' },
-  automation_bundle: { group: 'Automate', label: 'Workflow automation bundle (3 to 5 linked workflows)', billing: 'once', ph: [1000, 2500], usd: [2500, 6000], weeks: '2-4' },
+  ai_chat_assistant_setup: { group: 'Automate', label: 'AI chat assistant for your website (setup)', billing: 'once', ph: [325, 750], usd: [750, 2500], weeks: '1-3' },
+  ai_chat_assistant_monthly: { group: 'Automate', label: 'AI chat assistant (monthly running and care)', billing: 'month', ph: [50, 125], usd: [100, 300] },
+  ai_feature: { group: 'Automate', label: 'AI added to an existing system (one feature)', billing: 'once', ph: [1350, 4150], usd: [2500, 8000], weeks: '2-6' },
+  automation_single: { group: 'Automate', label: 'Workflow automation (single workflow)', billing: 'once', ph: [250, 600], usd: [400, 1200], weeks: '0.5-2' },
+  automation_bundle: { group: 'Automate', label: 'Workflow automation bundle (3 to 5 linked workflows)', billing: 'once', ph: [1000, 2500], usd: [1500, 4500], weeks: '2-4' },
   automation_care: { group: 'Automate', label: 'Automation care', billing: 'month', ph: [50, 125], usd: [150, 400] },
-  voice_agent_setup: { group: 'Automate', label: 'Voice / phone AI agent (setup)', billing: 'once', ph: [1350, 3000], usd: [3000, 7000], weeks: '2-4' },
-  voice_agent_monthly: { group: 'Automate', label: 'Voice / phone AI agent (monthly, plus call minutes)', billing: 'month', ph: [125, 300], usd: [250, 600] },
-  ai_training_half_day: { group: 'Automate', label: 'AI staff training, half day', billing: 'once', ph: [500, 1000], usd: [1500, 3000] },
-  ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', ph: [1000, 2000], usd: [3000, 6000] },
+  voice_agent_setup: { group: 'Automate', label: 'Voice / phone AI agent (setup)', billing: 'once', ph: [1350, 3000], usd: [1500, 5000], weeks: '2-4' },
+  voice_agent_monthly: { group: 'Automate', label: 'Voice / phone AI agent (monthly, plus call minutes)', billing: 'month', ph: [125, 300], usd: [200, 500] },
+  ai_training_half_day: { group: 'Automate', label: 'AI staff training, half day', billing: 'once', ph: [500, 1000], usd: [750, 1500] },
+  ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', ph: [1000, 2000], usd: [1500, 3000] },
 
   // ----- Staff (full time, priced in steps by role, Lee 2026-10-31) -----
   // Overseas only: from $1,499, working the client's hours (every role up $300,
@@ -52,16 +58,16 @@ export const ITEMS = {
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', ph: [25, 75], usd: [60, 150] },
-  video_edited: { group: 'Video', label: 'Edited marketing video (30 to 90 seconds)', billing: 'each', ph: [75, 175], usd: [150, 400] },
-  video_pack_4: { group: 'Video', label: 'Monthly video package, 4 videos', billing: 'month', ph: [125, 250], usd: [300, 600] },
-  video_pack_8: { group: 'Video', label: 'Monthly video package, 8 videos', billing: 'month', ph: [225, 425], usd: [550, 1100] },
-  video_pack_12: { group: 'Video', label: 'Monthly video package, 12 videos', billing: 'month', ph: [300, 600], usd: [750, 1500] },
+  video_edited: { group: 'Video', label: 'Edited marketing video (30 to 90 seconds)', billing: 'each', ph: [75, 175], usd: [150, 350] },
+  video_pack_4: { group: 'Video', label: 'Monthly video package, 4 videos', billing: 'month', ph: [125, 250], usd: [300, 550] },
+  video_pack_8: { group: 'Video', label: 'Monthly video package, 8 videos', billing: 'month', ph: [225, 425], usd: [500, 1000] },
+  video_pack_12: { group: 'Video', label: 'Monthly video package, 12 videos', billing: 'month', ph: [300, 600], usd: [700, 1400] },
 
   // ----- Care (after a build) -----
   website_care_basic: { group: 'Care', label: 'Website care, basic', billing: 'month', ph: [50, 75], usd: [75, 150] },
-  website_care_plus: { group: 'Care', label: 'Website care plus', billing: 'month', ph: [100, 200], usd: [200, 400] },
-  shop_care: { group: 'Care', label: 'Online shop care', billing: 'month', ph: [175, 425], usd: [300, 700] },
-  system_care: { group: 'Care', label: 'System care for a custom web app (1.25% to 1.75% of the build price a month)', billing: 'month', percentOfSystems: [0.0125, 0.0175], minimum: { ph: 125, usd: 400 } },
+  website_care_plus: { group: 'Care', label: 'Website care plus', billing: 'month', ph: [100, 200], usd: [150, 300] },
+  shop_care: { group: 'Care', label: 'Online shop care', billing: 'month', ph: [175, 425], usd: [200, 500] },
+  system_care: { group: 'Care', label: 'System care for a custom web app (1.25% to 1.5% of the build price a month)', billing: 'month', percentOfSystems: [0.0125, 0.015], minimum: { ph: 125, usd: 300 } },
 };
 
 export const ITEM_IDS = Object.keys(ITEMS);
