@@ -6,10 +6,10 @@
 // `usd` for everyone else. Every price is in dollars (Lee 2026-11-02); the `ph`
 // prices are the approved peso prices converted at about ₱60 per $1 and rounded
 // (to $50 from $500 up, to $25 below). A missing market means "not offered
-// there"; 'call' means offered there, with the price confirmed on a discovery call.
+// there".
 // billing: 'once' (one-time project), 'month' (every month), 'each' (per unit).
 
-export const PRICE_BOOK_VERSION = '2026-11-02 draft 6 (dollars for everyone)';
+export const PRICE_BOOK_VERSION = '2026-11-02 draft 7 (no staffing in the Philippines)';
 
 export const ITEMS = {
   // ----- Build -----
@@ -41,14 +41,14 @@ export const ITEMS = {
   ai_training_full_day: { group: 'Automate', label: 'AI staff training, full day', billing: 'once', ph: [1000, 2000], usd: [3000, 6000] },
 
   // ----- Staff (full time, priced in steps by role, Lee 2026-10-31) -----
-  // Overseas: from $1,499, working the client's hours (every role up $300, Lee
-  // 2026-10-31). Philippines: Philippine daytime hours, price confirmed on a call.
-  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', ph: 'call', usd: [1699, 2199] },
-  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', ph: 'call', usd: [2099, 2699] },
-  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', ph: 'call', usd: [1799, 2399] },
-  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', ph: 'call', usd: [1599, 1999] },
-  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', ph: 'call', usd: [1499, 1799] },
-  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', ph: 'call', usd: [1599, 2099] },
+  // Overseas only: from $1,499, working the client's hours (every role up $300,
+  // Lee 2026-10-31). Not offered to businesses in the Philippines (Lee 2026-11-02).
+  staff_virtual_assistant: { group: 'Staff', label: 'AI-native virtual assistant (full time)', billing: 'month', usd: [1699, 2199] },
+  staff_executive_assistant: { group: 'Staff', label: 'Executive assistant (full time)', billing: 'month', usd: [2099, 2699] },
+  staff_bookkeeper: { group: 'Staff', label: 'Bookkeeper (full time)', billing: 'month', usd: [1799, 2399] },
+  staff_admin: { group: 'Staff', label: 'Admin / back-office assistant (full time)', billing: 'month', usd: [1599, 1999] },
+  staff_data_entry: { group: 'Staff', label: 'Data entry and research assistant (full time)', billing: 'month', usd: [1499, 1799] },
+  staff_customer_support: { group: 'Staff', label: 'Customer support assistant (full time)', billing: 'month', usd: [1599, 2099] },
 
   // ----- Video -----
   video_product_reel: { group: 'Video', label: 'AI product reel from one photo (10 to 30 seconds)', billing: 'each', ph: [25, 75], usd: [60, 150] },
@@ -103,10 +103,6 @@ export function estimate({ client_region, items }) {
     if (id === 'system_care') { wantsSystemCare = true; continue; }
     const range = item[key];
     if (!range) { problems.push(`"${item.label}" is not offered ${key === 'ph' ? 'in the Philippines' : 'outside the Philippines'}.`); continue; }
-    if (range === 'call') {
-      lines.push({ item_id: id, label: item.label, billing: 'call', low: null, high: null, range: 'Price confirmed on a free discovery call', weeks: item.weeks || null });
-      continue;
-    }
     const qty = item.billing === 'each' ? Math.min(Math.max(parseInt(raw.quantity, 10) || 1, 1), MAX_QUANTITY) : 1;
     const low = range[0] * qty, high = range[1] * qty;
     if (item.billing === 'month') { monthLow += low; monthHigh += high; }
