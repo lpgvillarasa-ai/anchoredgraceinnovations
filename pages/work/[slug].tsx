@@ -1,6 +1,5 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import PageHead from '@/components/PageHead';
-import Placeholder from '@/components/Placeholder';
 import SubpageShell from '@/components/SubpageShell';
 import { CASE_STUDIES, type CaseStudy } from '@/lib/caseStudies';
 import { readFragments, type Fragments } from '@/lib/legacy';
@@ -18,15 +17,6 @@ export const getStaticProps: GetStaticProps<Props> = ({ params }) => {
   return { props: { study, f: readFragments('shared') } };
 };
 
-// Not linked from the site and kept out of search results (noindex, not in the
-// sitemap) until Lee sends the real text for these three sections. When he does,
-// fill them in, drop `noindex`, add the pages back to public/sitemap.xml and put
-// `story: '/work/<slug>'` back on the project in public/js/projects.js.
-const SECTIONS: [string, string][] = [
-  ['The problem', '[PROBLEM: 2 to 3 sentences]'],
-  ['What we built', '[WHAT WE BUILT: 3 to 5 short points]'],
-  ['How it is used today', '[HOW IT IS USED TODAY: 2 to 3 sentences]'],
-];
 
 export default function CaseStudyPage({ study, f }: Props) {
   return (
@@ -35,7 +25,6 @@ export default function CaseStudyPage({ study, f }: Props) {
         title={`${study.name}: case study | Anchored Grace Innovations`}
         description={`How Anchored Grace Innovations built ${study.name}. ${study.line}`}
         path={`/work/${study.slug}`}
-        noindex
       />
       <section className="tw:px-[var(--gutter)] tw:pb-16 tw:pt-36 tw:sm:pt-44">
         <div className="tw:mx-auto tw:max-w-[1080px]">
@@ -62,12 +51,19 @@ export default function CaseStudyPage({ study, f }: Props) {
 
       <section className="tw:px-[var(--gutter)] tw:pb-20">
         <div className="tw:mx-auto tw:grid tw:max-w-[1080px] tw:gap-10 tw:md:grid-cols-[1fr_2fr]">
-          {SECTIONS.map(([heading, gap]) => (
-            <div key={heading} className="tw:contents">
-              <h2 className="tw:m-0 tw:text-[22px] tw:font-semibold tw:tracking-[-0.015em] tw:text-ink">{heading}</h2>
-              <Placeholder text={gap} />
-            </div>
-          ))}
+          <h2 className="tw:m-0 tw:text-[22px] tw:font-semibold tw:tracking-[-0.015em] tw:text-ink">The problem</h2>
+          <p className="tw:m-0 tw:text-[17px] tw:leading-relaxed tw:text-body">{study.problem}</p>
+          <h2 className="tw:m-0 tw:text-[22px] tw:font-semibold tw:tracking-[-0.015em] tw:text-ink">What we built</h2>
+          <ul className="tw:m-0 tw:grid tw:gap-3 tw:p-0 tw:[list-style:none]">
+            {study.built.map((b) => (
+              <li key={b} className="tw:flex tw:gap-3 tw:text-[17px] tw:leading-relaxed tw:text-body">
+                <span className="tw:mt-[0.6em] tw:size-1.5 tw:shrink-0 tw:rounded-full tw:bg-gold-ink" aria-hidden="true" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+          <h2 className="tw:m-0 tw:text-[22px] tw:font-semibold tw:tracking-[-0.015em] tw:text-ink">How it is used today</h2>
+          <p className="tw:m-0 tw:text-[17px] tw:leading-relaxed tw:text-body">{study.today}</p>
         </div>
       </section>
 
