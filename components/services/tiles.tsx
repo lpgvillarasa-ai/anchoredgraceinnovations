@@ -111,7 +111,7 @@ export function FrontDeskTile({ className }: { className?: string }) {
     <Tile tone="light" label="AI FRONT DESK" title="Answers while you work." className={className}>
       <div className="tw:flex tw:flex-1 tw:flex-col tw:gap-2 tw:text-[14px]" aria-live="polite">
         <p className="tw:m-0 tw:max-w-[88%] tw:rounded-2xl tw:rounded-tl-md tw:bg-white tw:px-3.5 tw:py-2.5 tw:text-ink tw:shadow-[0_1px_2px_rgba(11,14,19,0.08)]">
-          Hi! I am the front desk assistant for Luma Clinic. What can I help you with?
+          Hi! I am the front desk assistant for AGI Clinic. What can I help you with?
         </p>
         {asked !== null && (
           <>
