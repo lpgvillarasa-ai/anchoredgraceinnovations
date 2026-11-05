@@ -114,12 +114,20 @@ export class EstimatorStore extends DurableObject {
   // A note from the contact form on the homepage ("Not ready for a call?"). Saved
   // with the chat enquiries so Lee sees both on /admin/leads. At most 3 a day from
   // one visitor and 200 a day in all, so a bot cannot flood the list.
-  saveNote({ ipHash, name, email, note }) {
+  // The mobile number and texting consent go in the "Project" column of /admin/leads, so
+  // the saved row (with its time) is the record of who agreed to texts, and to which wording.
+  saveNote({ ipHash, name, email, note, phone = '', smsConsent = false, consentVersion = '' }) {
     this.tidy();
     if (!this.bump(`ip:${ipHash}:notes`, 3, 24 * HOUR)) return { ok: false, reason: 'ip_daily' };
     if (!this.bump('all:notes', 200, 24 * HOUR)) return { ok: false, reason: 'busy' };
+    const now = Date.now();
+    const parts = ['Contact form note'];
+    if (phone) parts.push(`Mobile: ${phone}`);
+    parts.push(smsConsent
+      ? `Agreed to texts on ${new Date(now).toISOString()} (SMS terms of ${consentVersion})`
+      : phone ? 'Did not agree to texts' : '');
     this.sql.exec('INSERT INTO leads (created, session_id, name, email, business, note, summary, estimate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      Date.now(), 'contact-form', name, email, '', note, 'Contact form note', '');
+      now, 'contact-form', name, email, '', note, parts.filter(Boolean).join(' · '), '');
     return { ok: true };
   }
 
