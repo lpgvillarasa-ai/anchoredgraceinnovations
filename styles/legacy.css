@@ -375,12 +375,14 @@ body {
 .hero-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(46px, 5.4vw, 74px);
-  line-height: 1.0;
-  letter-spacing: -0.045em;
+  font-size: clamp(46px, 5.4vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.048em;
   color: var(--ink);
-  margin: 0 0 24px;
+  margin: 0 0 26px;
+  text-wrap: balance;
 }
+.hero-title .t-muted { color: #8b857a; }
 .hero-sub { font-size: 19px; line-height: 1.62; color: #50545b; margin: 0 0 34px; max-width: 500px; }
 .hero-ctas { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; flex-wrap: wrap; }
 .hero-note { font-size: 13.5px; color: #7a746a; letter-spacing: 0.01em; }
@@ -487,28 +489,29 @@ body {
 .trust-items span { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: #44484f; opacity: 0.72; }
 
 /* ============ Shared section bits ============ */
-.section { padding: clamp(88px, 10vw, 128px) var(--gutter); scroll-margin-top: 90px; }
-.section-bottom { padding: 0 var(--gutter) clamp(88px, 10vw, 128px); scroll-margin-top: 90px; }
+.section { padding: clamp(96px, 11vw, 148px) var(--gutter); scroll-margin-top: 90px; }
+.section-bottom { padding: 0 var(--gutter) clamp(96px, 11vw, 148px); scroll-margin-top: 90px; }
 .kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: #7A5F2E; margin-bottom: 16px; }
 .kicker.gold { color: var(--gold); }
 .h2 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(32px, 3.6vw, 44px);
-  letter-spacing: -0.022em;
+  font-size: clamp(36px, 4.4vw, 58px);
+  letter-spacing: -0.036em;
   color: var(--ink);
   margin: 0;
-  max-width: 620px;
-  line-height: 1.05;
+  max-width: 760px;
+  line-height: 1.02;
+  text-wrap: balance;
 }
-.h2.wide { max-width: 640px; }
-.h2.md { font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -0.02em; }
+.h2.wide { max-width: 800px; }
+.h2.md { font-size: clamp(30px, 3.4vw, 42px); letter-spacing: -0.03em; }
 .section-head { margin-bottom: 52px; }
 .section-head.split {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 32px; flex-wrap: wrap;
 }
-.section-aside { font-size: 15.5px; color: #6a6459; max-width: 290px; margin: 0; line-height: 1.55; }
+.section-aside { font-size: 16px; color: #6a6459; max-width: 320px; margin: 0; line-height: 1.55; text-wrap: pretty; }
 #talent .section-head { margin-bottom: 48px; }
 
 /* ============ Services pillars ============ */
@@ -643,11 +646,12 @@ body {
 .ai-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(34px, 3.9vw, 46px);
-  letter-spacing: -0.022em;
+  font-size: clamp(36px, 4.4vw, 58px);
+  letter-spacing: -0.036em;
   color: var(--cream-text);
   margin: 0 0 20px;
-  line-height: 1.04;
+  line-height: 1.02;
+  text-wrap: balance;
 }
 .ai-sub { font-size: 18px; line-height: 1.62; color: #a9adb4; margin: 0; max-width: 460px; }
 .ai-list { display: flex; flex-direction: column; gap: 14px; }
@@ -749,7 +753,7 @@ body {
 .btn-plan { display: block; text-align: center; padding: 13px; font-size: 14.5px; }
 .btn-gold.btn-plan { transition: background .2s, transform .25s var(--ease-out); box-shadow: none; }
 .btn-gold.btn-plan:hover { background: #e6d5b2; transform: translateY(-1px); box-shadow: none; }
-.pricing-note { font-family: var(--font-mono); font-size: 11px; color: #6b655b; margin: 22px 0 0; }
+.pricing-note { font-size: 13.5px; line-height: 1.5; color: #6b655b; margin: 24px 0 0; }
 
 /* ============ Contact / CTA ============ */
 .contact {
@@ -788,6 +792,14 @@ body {
 .contact-sub { font-size: 18.5px; line-height: 1.6; color: #a9adb4; margin: 0 auto 36px; max-width: 460px; }
 .contact-ctas { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
 .contact-note { font-size: 13.5px; color: #7a7f87; }
+.contact-text-link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 6px;
+  font-weight: 600; font-size: 15.5px; color: var(--cream-text); text-decoration: none;
+  border-bottom: 1px solid rgba(244, 241, 235, 0.35);
+}
+.contact-text-link:hover { border-bottom-color: var(--gold); color: #fff; }
+.contact-text-link:hover .btn-arrow { transform: translateX(3px); }
+.contact-text-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
 
 /* ============ Footer ============ */
 .footer { padding: 56px var(--gutter) 40px; background: var(--ink-deep); }
@@ -1134,7 +1146,12 @@ html.work-dialog-open { overflow: hidden; }
 .est-lead-done { font-size: 14px; line-height: 1.45; color: var(--ink); }
 @media (max-width: 560px) {
   .est-panel { right: 0; left: 0; bottom: 0; width: 100%; height: calc(100dvh - 56px); border-radius: 18px 18px 0 0; }
-  .est-launch { right: 16px; bottom: max(16px, env(safe-area-inset-bottom, 0px)); }
+  .est-launch { right: 14px; bottom: max(14px, env(safe-area-inset-bottom, 0px)); min-height: 44px; padding: 0 16px; font-size: 13.5px; gap: 7px; }
+}
+@media (max-width: 760px) {
+  .est-launch { transition: opacity .25s var(--ease-out), transform .25s var(--ease-out), visibility 0s; }
+  /* tucked away (also from keyboard focus) while the hero or the contact section, which have their own estimate buttons, is on screen */
+  body.est-tucked .est-launch { opacity: 0; transform: translateY(14px); visibility: hidden; transition: opacity .25s var(--ease-out), transform .25s var(--ease-out), visibility 0s linear .25s; }
 }
 
 @media (max-width: 1024px) {
@@ -1208,6 +1225,7 @@ html.work-dialog-open { overflow: hidden; }
   }
   .btn-xl { width: 100%; text-align: center; }
   .contact-ctas { flex-direction: column; align-items: stretch; }
+  .contact-ctas .contact-text-link { align-self: center; }
 }
 
 /* ============ Reduced motion ============
