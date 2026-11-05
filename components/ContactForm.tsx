@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { BUSINESS_NAME, SMS_CONSENT_VERSION, SMS_TOPICS } from '@/lib/contact';
+import { BUSINESS_NAME, SMS_CONSENT_VERSION, SMS_TOPICS_MINE } from '@/lib/contact';
 
 // "Not ready for a call? Leave a note." Sends to /api/contact, which saves the note
 // on Lee's private enquiries page. The hidden "website" field is a trap for bots.
@@ -102,7 +102,7 @@ export default function ContactForm() {
             className="tw:mt-1 tw:size-5 tw:shrink-0 tw:cursor-pointer tw:accent-[#0B0E13]"
           />
           <label htmlFor="cf-sms" className="tw:cursor-pointer tw:text-[13px] tw:leading-relaxed tw:text-[#3d4148]">
-            <span className="tw:font-semibold tw:text-ink">Text me about my enquiry (optional).</span> By ticking this box, I agree to receive text messages from {BUSINESS_NAME} at the mobile number above about {SMS_TOPICS}. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase. See our <a href="/sms-terms" className="tw:text-gold-ink tw:underline">SMS terms</a> and <a href="/privacy" className="tw:text-gold-ink tw:underline">privacy policy</a>.
+            <span className="tw:font-semibold tw:text-ink">Text me about my enquiry (optional).</span> By ticking this box, I agree to receive text messages from {BUSINESS_NAME} at the mobile number above about {SMS_TOPICS_MINE}. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase. See our <a href="/sms-terms" className="tw:text-gold-ink tw:underline">SMS terms</a> and <a href="/privacy" className="tw:text-gold-ink tw:underline">privacy policy</a>.
           </label>
         </div>
         <div className="tw:absolute tw:left-[-10000px] tw:size-px tw:overflow-hidden" aria-hidden="true">

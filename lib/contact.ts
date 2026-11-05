@@ -13,3 +13,5 @@ export const SMS_CONSENT_VERSION = '2026-11-05';
 // What the texts are about: service texts only, no marketing (Lee, 2026-11-05). It must
 // match the campaign registered in Zoom Phone.
 export const SMS_TOPICS = 'your enquiry, quotes, scheduled calls and project updates';
+// The same topics in the visitor's own words, for the consent box ("I agree ... about my enquiry").
+export const SMS_TOPICS_MINE = 'my enquiry, quotes, scheduled calls and project updates';
