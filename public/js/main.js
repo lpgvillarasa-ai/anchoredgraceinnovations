@@ -22,24 +22,26 @@
   // now starts after the page is shown): re-animating visible text makes it blink out.
   const heroTitle = document.querySelector('.hero-title');
   if (heroTitle && !REDUCED && !heroTitle.classList.contains('instant')) {
-    const parts = heroTitle.textContent.split(/(\s+)/);
+    // Each piece keeps its styling class (the muted second phrase), so words split
+    // inside a <span class="t-muted"> stay muted.
+    const pieces = [...heroTitle.childNodes].map((n) => ({ text: n.textContent || '', cls: n.nodeType === 1 ? n.className : '' }));
     heroTitle.textContent = '';
     let wordIndex = 0;
-    parts.forEach((part) => {
+    pieces.forEach(({ text, cls }) => text.split(/(\s+)/).forEach((part) => {
       if (!part) return;
       if (/^\s+$/.test(part)) {
         heroTitle.appendChild(document.createTextNode(part));
         return;
       }
       const mask = document.createElement('span');
-      mask.className = 'w';
+      mask.className = cls ? 'w ' + cls : 'w';
       const inner = document.createElement('span');
       inner.className = 'wi';
       inner.style.setProperty('--wi', String(wordIndex++));
       inner.textContent = part;
       mask.appendChild(inner);
       heroTitle.appendChild(mask);
-    });
+    }));
     heroTitle.removeAttribute('data-reveal');
     heroTitle.style.removeProperty('--d');
   }
@@ -133,6 +135,19 @@
     window.addEventListener('scroll', queue, { passive: true });
     window.addEventListener('resize', queue);
     onScrollFrame();
+  }
+
+  // Phones: the floating "Get an estimate" button steps aside while the hero or the
+  // contact section is on screen; both have their own estimate buttons, and on a
+  // small screen the floating one would sit on top of them (styles/legacy.css).
+  if (hasIO) {
+    const tuckers = [document.querySelector('.hero'), document.getElementById('contact')].filter(Boolean);
+    const showing = new Set();
+    const tuck = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) showing.add(e.target); else showing.delete(e.target); });
+      document.body.classList.toggle('est-tucked', showing.size > 0);
+    }, { threshold: 0.2 });
+    tuckers.forEach((t) => tuck.observe(t));
   }
 
   // Email links: the address is put together here, not written in the page, so
