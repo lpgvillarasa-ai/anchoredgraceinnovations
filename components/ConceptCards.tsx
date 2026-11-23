@@ -6,17 +6,17 @@ import { useEffect, useRef, useState } from 'react';
 const CONCEPTS = [
   {
     href: 'https://gr86.anchoredgraceinnovation.com', label: 'GR86 concept site, opens in a new tab',
-    img: '/media/work/concept-gr86.jpg', alt: 'GR86 concept site: a red sports car under studio light', clip: '/media/previews/gr86.mp4',
+    img: '/media/work/concept-gr86.jpg', alt: 'GR86 concept site: a red sports car under studio light', clip: '/reels/concepts-v2/gr86.mp4',
     kind: 'Scroll film · 324 frames', title: 'GR86 Track bRED', text: 'One continuous camera move around a sports car, controlled by your scroll.', note: 'Unofficial concept · not affiliated with Toyota',
   },
   {
     href: 'https://redbull.anchoredgraceinnovation.com', label: 'Red Bull scroll film concept, opens in a new tab',
-    img: '/media/work/concept-redbull.jpg', alt: 'Energy drink can on a wet surface, concept site', clip: '/media/previews/redbull.mp4',
+    img: '/media/work/concept-redbull.jpg', alt: 'Energy drink can on a wet surface, concept site', clip: '/reels/concepts-v2/redbull.mp4',
     kind: 'Scroll film · product launch', title: 'Gives You Wiiings', text: 'A product launch told as a short film, made from AI-generated takes.', note: 'Unofficial concept · not affiliated with Red Bull',
   },
   {
     href: 'https://residences.anchoredgraceinnovation.com', label: 'AGI Residences concept site, opens in a new tab',
-    img: '/media/work/concept-residences.jpg', alt: 'Clifftop villa with an infinity pool at sunset, AGI Residences', clip: '/media/previews/residences.mp4',
+    img: '/media/work/concept-residences.jpg', alt: 'Clifftop villa with an infinity pool at sunset, AGI Residences', clip: '/reels/concepts-v2/residences.mp4',
     kind: 'Scroll film · luxury real estate', title: 'AGI Residences', text: 'A five-chapter film that ends at a vault door, for a private residence club.', note: 'Our own concept brand',
   },
 ];
