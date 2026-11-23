@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import PageHead from '@/components/PageHead';
 import SubpageShell from '@/components/SubpageShell';
 import { readFragments, type Fragments } from '@/lib/legacy';
+import { CONTACT_EMAIL, SMS_TOPICS } from '@/lib/contact';
 
 export const getStaticProps: GetStaticProps<{ f: Fragments }> = () => ({ props: { f: readFragments('shared') } });
 
@@ -23,23 +24,30 @@ export default function Privacy({ f }: { f: Fragments }) {
     <SubpageShell f={f}>
       <PageHead
         title="Privacy policy | Anchored Grace Innovations"
-        description="What Anchored Grace Innovations does with what you share on this website: the contact form, the AI estimate chat, and the services that help run the site."
+        description="What Anchored Grace Innovations does with what you share on this website: the contact form, text messages, the AI estimate chat, and the services that help run the site."
         path="/privacy"
       />
       <div className="tw:px-[var(--gutter)] tw:pb-28 tw:pt-36 tw:sm:pt-44">
         <article className="tw:mx-auto tw:max-w-[760px]">
           <div className="kicker">PRIVACY</div>
           <h1 className="h2 tw:mb-4 tw:mt-3">Privacy policy</h1>
-          <p className="tw:mb-8 tw:mt-5 tw:text-[15px] tw:text-[#5b5f66]">Last updated: 2 November 2026</p>
+          <p className="tw:mb-8 tw:mt-5 tw:text-[15px] tw:text-[#5b5f66]">Last updated: 5 November 2026</p>
 
           <Block title="Who we are">
-            <p>Anchored Grace Innovations is a small studio based in Cebu, Philippines, run by Lee Villarasa. For anything about your information, email <a className="tw:text-gold-ink tw:underline" href="mailto:lee@anchoredgraceinnovations.com">lee@anchoredgraceinnovations.com</a>.</p>
+            <p>Anchored Grace Innovations is a small studio based in Cebu, Philippines, run by Lee Villarasa. For anything about your information, email <a className="tw:text-gold-ink tw:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
           </Block>
 
           <Block title="The contact form">
-            <p>When you leave a note, we keep your name, your email and what you wrote. It is saved in our own private storage on Cloudflare, which only Lee can open, and we use it only to reply to you. We do not sell it or add you to a mailing list.</p>
+            <p>When you leave a note, we keep your name, your email, your mobile number if you give one, and what you wrote. It is saved in our own private storage on Cloudflare, which only Lee can open, and we use it only to reply to you. We do not sell it or add you to a mailing list.</p>
+            <p>If you tick the box to receive texts, we also keep a record that you agreed, with the date and time, as proof of your consent.</p>
             <p>To stop automated spam, we also keep a scrambled fingerprint of your internet address (not the address itself) for one day, which limits how many notes can be sent.</p>
             <p>We keep notes only as long as we need them to reply to you, and we delete yours any time you ask by email.</p>
+          </Block>
+
+          <Block title="Text messages (SMS)">
+            <p>We text you only if you ask us to, by ticking the box on our contact form, and only about {SMS_TOPICS}. We do not send marketing texts. Message frequency varies, message and data rates may apply, and you can reply STOP at any time to stop or HELP for help. The full terms are on our <a className="tw:text-gold-ink tw:underline" href="/sms-terms">SMS terms</a> page.</p>
+            <p><strong>No mobile information will be shared with third parties or affiliates for marketing or promotional purposes.</strong> All the other categories of sharing in this policy exclude text messaging originator opt-in data and consent: this information will not be shared with any third parties.</p>
+            <p>We send our texts from our business phone line on Zoom Phone.</p>
           </Block>
 
           <Block title="The AI estimate chat">

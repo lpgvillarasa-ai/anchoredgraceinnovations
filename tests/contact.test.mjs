@@ -62,3 +62,41 @@ test('the daily limit is explained in plain words', async () => {
   assert.equal(res.status, 429);
   assert.match((await res.json()).error, /already have your notes/);
 });
+
+test('a mobile number is optional; texting consent is saved only as a real yes, with its wording', async () => {
+  const { env, saved } = setup();
+  // no number, no consent: as before
+  assert.equal((await handleContact(post(good), env)).status, 200);
+  assert.equal(saved[0].phone, '');
+  assert.equal(saved[0].smsConsent, false);
+  // a number and a ticked box, with the wording version
+  const res = await handleContact(post({ ...good, phone: '+1 (555) 123-4567', smsConsent: true, smsConsentVersion: '2026-11-05' }), env);
+  assert.equal(res.status, 200);
+  assert.equal(saved[1].phone, '+15551234567');
+  assert.equal(saved[1].smsConsent, true);
+  assert.equal(saved[1].consentVersion, '2026-11-05');
+  // a number without the box: kept, but no consent
+  await handleContact(post({ ...good, phone: '0917 123 4567' }), env);
+  assert.equal(saved[2].phone, '09171234567');
+  assert.equal(saved[2].smsConsent, false);
+  // anything but a real true is not consent
+  await handleContact(post({ ...good, phone: '+15551234567', smsConsent: 'true', smsConsentVersion: '2026-11-05' }), env);
+  assert.equal(saved[3].smsConsent, false);
+  assert.equal(saved[3].consentVersion, '');
+});
+
+test('a bad number, a ticked box without a number, or unknown wording is refused', async () => {
+  const { env, saved } = setup();
+  for (const [body, field] of [
+    [{ ...good, phone: '12ab' }, 'phone'],
+    [{ ...good, phone: '+1 555 12' }, 'phone'],
+    [{ ...good, smsConsent: true, smsConsentVersion: '2026-11-05' }, 'phone'],
+  ]) {
+    const res = await handleContact(post(body), env);
+    assert.equal(res.status, 400);
+    assert.equal((await res.json()).field, field);
+  }
+  const res = await handleContact(post({ ...good, phone: '+15551234567', smsConsent: true, smsConsentVersion: 'made-up' }), env);
+  assert.equal(res.status, 400);
+  assert.equal(saved.length, 0);
+});
